@@ -32,6 +32,8 @@ docker compose up -d --build
 curl -fsSL https://raw.githubusercontent.com/yjg-djb/echo-frontend/main/scripts/deploy-wizard.sh | bash
 ```
 
+若服务器无法访问 GitHub，使用 Git archive 发布包，解压后运行 `bash scripts/deploy-offline.sh`。该脚本不访问 GitHub，仍保留端口检查、健康检查和失败回滚。
+
 ## 场景
 
 1. 院落高点

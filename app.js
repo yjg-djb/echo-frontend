@@ -254,7 +254,7 @@
     activateEngines(previousId, id);
     if (id === 's-interview') renderInterview();
     if (id === 's-invite-sent') updateInterviewShareLink();
-    if (id === 's-book') { fitBook(); renderBookPage(false); }
+    if (id === 's-book') renderBookPage(false);
     if (id === 's-confirm' || id === 's-confirmed') updateConfirmState();
     if (id === 's-invite-sent' || id === 's-elder-invite') syncQuestionUI();
   }
@@ -1157,17 +1157,6 @@
       if (event.animationName === 'control-rebound') event.target.classList.remove('is-rebounding');
     });
   })();
-
-  // 人生之书：书本等比放大到舞台极限（铺满但不溢出）
-  const fitBook = () => {
-    const stage = $('.book-stage');
-    if (!stage || !stage.clientHeight) return;
-    const byWidth = (Math.min(innerWidth, 430) - 22) / 330;
-    const byHeight = (stage.clientHeight - 14) / 500;
-    document.documentElement.style.setProperty('--book-scale', String(Math.round(Math.min(byWidth, byHeight, 1.28) * 1000) / 1000));
-  };
-  addEventListener('resize', fitBook);
-  fitBook();
 
   buildWaveform();
   renderCreateStep();

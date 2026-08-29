@@ -43,7 +43,7 @@
       id: 'hall-threshold',
       title: '陈老先生房门',
       stage: '房间门口 · 推门后开始播放回忆',
-      src: 'assets/panoramas/hall-threshold.webp',
+      src: 'assets/panoramas/hall-threshold.webp?v=2',
       thumb: 'assets/panoramas/hall-threshold-thumb.webp',
       yaw: 0,
       pitch: -0.02,

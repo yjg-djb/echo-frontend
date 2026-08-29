@@ -59,12 +59,12 @@
       stage: '房间之内 · 3D 收音机正在播放回忆',
       src: 'assets/panoramas/hall-center.webp',
       thumb: 'assets/panoramas/hall-center-thumb.webp',
-      yaw: 0.95,
+      yaw: -0.19,
       pitch: -0.04,
       fov: 90,
       scroll: 1,
       hotspots: [
-        { label: '立体收音机', sub: '陈老先生原声 · 02:10', yaw: 0.95, pitch: 0.08, audio: true },
+        { label: '立体收音机', sub: '陈老先生原声 · 02:10', yaw: -0.19, pitch: -0.02, audio: true },
         { label: '翻开人生之书', sub: '新增了文儒坊章节', yaw: 0.36, pitch: -0.12, go: 's-book' }
       ]
     }
@@ -198,8 +198,13 @@
     radioFace.color.set(0xffffff);
     radioFace.needsUpdate = true;
   });
-  radio.scale.setScalar(0.62);
-  radio.position.copy(directionFor(0.95, -0.18, 3.25));
+  // 播放指示灯：面板右上角小绿灯，播放时点亮呼吸（整机静止不震动）
+  const radioLed = new T.Mesh(new T.BoxGeometry(0.055, 0.055, 0.02), new T.MeshStandardMaterial({ color: 0x1d3a24, emissive: 0x27c25a, emissiveIntensity: 0.12, transparent: true, opacity: 1, depthTest: false, depthWrite: false }));
+  radioLed.position.set(0.88, 0.46, 0.35);
+  radioLed.renderOrder = 6;
+  radio.add(radioLed);
+  radio.scale.setScalar(0.5);
+  radio.position.copy(directionFor(-0.19, -0.26, 3.25));
   radio.lookAt(new T.Vector3(0, 0, 0));
   radio.rotateY(0.13);
   radio.visible = false;
@@ -593,9 +598,7 @@
     camera.lookAt(directionFor(yaw, pitch, 1));
     if (radio.visible) {
       const playing = document.body.classList.contains('is-audio-playing');
-      const pulse = playing ? 1 + Math.sin(now * 0.012) * 0.014 : 1;
-      radioBody.scale.set(pulse, pulse, 1 + (pulse - 1) * 2.2);
-      radio.rotation.z = playing ? Math.sin(now * 0.0011) * 0.014 : 0;
+      radioLed.material.emissiveIntensity = playing ? 1.7 + Math.sin(now * 0.005) * 0.35 : 0.12;
       radioLight.intensity = playing ? 1.65 : 1.25;
     }
     renderHotspots();

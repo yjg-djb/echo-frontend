@@ -1,42 +1,124 @@
-[CmdletBinding()]
-param()
+﻿$ErrorActionPreference = 'Stop'
 
-$ErrorActionPreference = 'Stop'
-$Root = Split-Path -Parent $PSScriptRoot
-$HtmlPath = Join-Path $Root 'index.html'
-$Html = Get-Content -LiteralPath $HtmlPath -Raw
-$PanoramaJs = Get-Content -LiteralPath (Join-Path $Root 'panorama.js') -Raw
-$Full = Get-ChildItem -LiteralPath (Join-Path $Root 'assets\panoramas') -Filter '*.webp' | Where-Object { $_.Name -notlike '*-thumb.webp' }
-$Thumbs = Get-ChildItem -LiteralPath (Join-Path $Root 'assets\panoramas') -Filter '*-thumb.webp'
+$ProjectRoot = Split-Path -Parent $PSScriptRoot
+$RequiredFiles = @(
+  'index.html',
+  'styles.css',
+  'app.js',
+  'panorama.js',
+  'panorama.css',
+  'vendor/three.min.js',
+  'assets/story/wenrufang-1978.webp',
+  'assets/memories/1978-wenrufang.wav',
+  'assets/memories/1982-shipyard.webp',
+  'assets/memories/2012-retirement-tea.wav',
+  'assets/interview/q1.wav',
+  'assets/interview/q8.wav',
+  'assets/interview/a1.wav',
+  'assets/interview/a8.wav',
+  'assets/audio/chen-wenrufang.wav',
+  'assets/photo-wall/wuyi-square-1982.webp',
+  'assets/wall/w01-wuyi-square-1982.wav',
+  'assets/photo-wall/wuyi-road-1991.webp',
+  'assets/wall/w15-wuyi-road-1991.wav',
+  'assets/panoramas/courtyard-overlook-360.webp',
+  'assets/panoramas/hall-center.webp',
+  'Product-Spec.md',
+  'Product-Spec-CHANGELOG.md'
+)
 
-$Checks = [ordered]@{
-  'screens-9' = ([regex]::Matches($Html, 'id="s-[a-z]+"').Count -eq 9)
-  'embedded-images-14' = ([regex]::Matches($Html, 'data:image/').Count -eq 14)
-  'panorama-runtime-once' = ([regex]::Matches($Html, 'panorama\.js').Count -eq 1)
-  'legacy-manor-disabled' = (-not $Html.Contains("tryLoad(0);`n})();"))
-  'full-panoramas-7' = ($Full.Count -eq 7)
-  'thumbs-7' = ($Thumbs.Count -eq 7)
-  'panorama-assets-under-6mb' = (($Full | Measure-Object Length -Sum).Sum -lt 6MB)
-  'overlook-hero' = (Test-Path -LiteralPath (Join-Path $Root 'assets\hero\courtyard-overlook.png'))
-  'three-local' = (Test-Path -LiteralPath (Join-Path $Root 'vendor\three.min.js'))
-  'service-worker' = (Test-Path -LiteralPath (Join-Path $Root 'sw.js'))
-  'favicon' = (Test-Path -LiteralPath (Join-Path $Root 'favicon.svg'))
-  'dual-sphere-cinema' = $PanoramaJs.Contains('const materials = [0, 1]')
-  'full-sphere-pitch' = $PanoramaJs.Contains('degToRad(85)')
-  'panorama-overview' = $PanoramaJs.Contains('pano-overview-trigger')
-  'opening-intro' = $PanoramaJs.Contains('duration: 2200')
-  'six-coordinate-network' = $PanoramaJs.Contains("id: 'gate-entry'") -and $PanoramaJs.Contains("id: 'hall-threshold'")
+$Missing = @()
+foreach ($RelativePath in $RequiredFiles) {
+  $Target = Join-Path $ProjectRoot $RelativePath
+  if (-not (Test-Path -LiteralPath $Target)) {
+    $Missing += $RelativePath
+  }
 }
 
-$Failed = @($Checks.GetEnumerator() | Where-Object { -not $_.Value })
-[pscustomobject]@{
-  Path = $HtmlPath
-  SHA256 = (Get-FileHash -LiteralPath $HtmlPath -Algorithm SHA256).Hash
-  Passed = $Checks.Count - $Failed.Count
-  Total = $Checks.Count
-  PanoramaBytes = ($Full | Measure-Object Length -Sum).Sum
-  Failed = ($Failed.Name -join ', ')
-} | Format-List
+if ($Missing.Count -gt 0) {
+  throw "缺少必要文件：$($Missing -join ', ')"
+}
 
-if ($Failed.Count) { throw "Verification failed: $($Failed.Name -join ', ')" }
-Write-Output 'Photoreal H5 static verification passed.'
+$Index = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $ProjectRoot 'index.html')
+$RequiredMarkers = @(
+  '时光回响',
+  's-family',
+  's-elder-invite',
+  's-interview',
+  's-confirm',
+  's-home',
+  's-gallery',
+  's-book',
+  's-book-customize',
+  'chatThread',
+  'interviewShareUrl',
+  '鲁小豫',
+  '回响',
+  'confirmStateBadge',
+  'privacyScopeToggle',
+  'wenrufang-1978',
+  '城市照片墙',
+  '走进记忆长廊',
+  '蓝印白布',
+  '制作实体书',
+  'chen-wenrufang.wav'
+)
+
+foreach ($Marker in $RequiredMarkers) {
+  if (-not $Index.Contains($Marker)) {
+    throw "index.html 缺少验收标记：$Marker"
+  }
+}
+
+node --check (Join-Path $ProjectRoot 'app.js')
+node --check (Join-Path $ProjectRoot 'panorama.js')
+
+$Styles = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $ProjectRoot 'styles.css')
+$PanoCss = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $ProjectRoot 'panorama.css')
+foreach ($SoftToken in @('#eef1f4', '#ff6938', '--shadow-inset', 'control-rebound')) {
+  if (-not $Styles.Contains($SoftToken)) {
+    throw "styles.css 缺少 soft-UI 设计标记：$SoftToken"
+  }
+}
+foreach ($LegacyToken in @('#c8954d', '#292017', '#9f3828', '--paper:#f4efe4')) {
+  if ($Styles.Contains($LegacyToken) -or $PanoCss.Contains($LegacyToken)) {
+    throw "旧暖金皮肤残留：$LegacyToken"
+  }
+}
+if (-not $PanoCss.Contains('rgba(246,248,250')) {
+  throw "panorama.css 缺少浅色玻璃 chrome 标记"
+}
+$PanoJs = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $ProjectRoot 'panorama.js')
+if (-not $PanoJs.Contains('showPanoFallback')) {
+  throw "panorama.js 缺少 WebGL 静态降级"
+}
+
+$App = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $ProjectRoot 'app.js')
+foreach ($AppMarker in @('assets/interview/q1.wav', 'assets/memories/1960-summer-wharf.webp', 'assets/photo-wall/wuyi-road-1991.webp', '1978-wenrufang.wav', 'sourceOf', 'askState', 'pressFeedback')) {
+  if (-not $App.Contains($AppMarker)) {
+    throw "app.js 缺少素材引用：$AppMarker"
+  }
+}
+
+$RadioAudio = Get-Item -LiteralPath (Join-Path $ProjectRoot 'assets/audio/chen-wenrufang.wav')
+if ($RadioAudio.Length -lt 500000) {
+  throw "收音机原声文件异常：$($RadioAudio.Length) bytes"
+}
+
+$InterviewClips = Get-ChildItem -LiteralPath (Join-Path $ProjectRoot 'assets/interview') -Filter '*.wav'
+if ($InterviewClips.Count -ne 16) {
+  throw "采访原声不完整：仅发现 $($InterviewClips.Count) / 16 个 wav"
+}
+
+$WallImages = Get-ChildItem -LiteralPath (Join-Path $ProjectRoot 'assets/photo-wall') -Filter '*.webp'
+$WallAudio = Get-ChildItem -LiteralPath (Join-Path $ProjectRoot 'assets/wall') -Filter '*.wav'
+if ($WallImages.Count -ne 15 -or $WallAudio.Count -ne 15) {
+  throw "照片墙素材不完整：图片 $($WallImages.Count) / 15，旁白 $($WallAudio.Count) / 15"
+}
+
+$Panoramas = Get-ChildItem -LiteralPath (Join-Path $ProjectRoot 'assets/panoramas') -Filter '*.webp'
+if ($Panoramas.Count -lt 12) {
+  throw "360° 全景资源不完整：仅发现 $($Panoramas.Count) 个 WebP 文件"
+}
+
+Write-Host "验证通过：页面结构、脚本语法、采访原声 16 段、照片墙 15 组与 360° 全景资源均完整。"

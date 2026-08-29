@@ -21,101 +21,51 @@
   const ease = t => 1 - Math.pow(1 - t, 3);
   const smooth = t => t * t * (3 - 2 * t);
   const wrapAngle = v => Math.atan2(Math.sin(v), Math.cos(v));
-  const maxScroll = 3200;
+  const maxScroll = 2200;
   const MAX_PITCH = T.MathUtils.degToRad(85);
 
   const SCENES = [
     {
       id: 'courtyard-aerial',
-      title: '院落高点',
-      stage: '俯瞰坐标 · 360° 写实院落',
+      title: '院落俯瞰',
+      stage: '院落俯瞰 · 下一镜直接抵达房门',
       src: 'assets/panoramas/courtyard-overlook-360.webp',
       thumb: 'assets/panoramas/courtyard-overlook-360-thumb.webp',
       yaw: 0,
       pitch: -0.44,
-      fov: 90,
+      fov: 94,
       scroll: 0,
       hotspots: [
-        { label: '走到院门', sub: '进入第 2 个坐标', yaw: -0.35, pitch: -0.16, scene: 1 },
-        { label: '心形的树', sub: '阿公 1992 年种下', yaw: 0, pitch: -0.26, scene: 2 }
-      ]
-    },
-    {
-      id: 'gate-entry',
-      title: '院门入口',
-      stage: '院门之内 · 回望完整院落',
-      src: 'assets/panoramas/gate-entry.webp',
-      thumb: 'assets/panoramas/gate-entry-thumb.webp',
-      yaw: 0.36,
-      pitch: -0.08,
-      fov: 90,
-      scroll: 0.18,
-      hotspots: [
-        { label: '走到心树旁', sub: '穿过石板庭院', yaw: 0.52, pitch: 0.02, scene: 2 },
-        { label: '回看院门', sub: '来时的方向', yaw: -2.75, pitch: -0.02, toast: '院门外，是每一次回家的路' }
-      ]
-    },
-    {
-      id: 'heart-tree',
-      title: '心树近景',
-      stage: '心树之下 · 向四周看看',
-      src: 'assets/panoramas/heart-tree.webp',
-      thumb: 'assets/panoramas/heart-tree-thumb.webp',
-      yaw: 0,
-      pitch: -0.05,
-      fov: 88,
-      scroll: 0.36,
-      hotspots: [
-        { label: '走到堂屋门前', sub: '进入第 4 个坐标', yaw: 0.36, pitch: -0.02, scene: 3 },
-        { label: '这棵心形的树', sub: '听阿公讲 1992 年', yaw: 0, pitch: 0.16, toast: '这棵树会记得每一次回家' }
+        { label: '前往陈老先生房间', sub: '镜头直接推到门口', yaw: -0.2, pitch: -0.16, scene: 1 }
       ]
     },
     {
       id: 'hall-threshold',
-      title: '堂屋门槛',
-      stage: '一扇门 · 同时连接院落与记忆馆',
+      title: '陈老先生房门',
+      stage: '房间门口 · 推门后开始播放回忆',
       src: 'assets/panoramas/hall-threshold.webp',
       thumb: 'assets/panoramas/hall-threshold-thumb.webp',
       yaw: 0,
       pitch: -0.02,
       fov: 90,
-      scroll: 0.56,
+      scroll: 0.5,
       hotspots: [
-        { label: '回望心树', sub: '院落方向', yaw: 0, pitch: 0.02, scene: 2 },
-        { label: '走进堂屋', sub: '家庭记忆馆', yaw: Math.PI, pitch: -0.02, scene: 4 }
+        { label: '推开这扇门', sub: '进入房间并播放陈老先生原声', yaw: 0, pitch: -0.02, scene: 2, audio: 'door' }
       ]
     },
     {
       id: 'hall-center',
-      title: '堂屋中央',
-      stage: '堂屋之内 · 家庭记忆馆',
+      title: '陈老先生的房间',
+      stage: '房间之内 · 3D 收音机正在播放回忆',
       src: 'assets/panoramas/hall-center.webp',
       thumb: 'assets/panoramas/hall-center-thumb.webp',
       yaw: 0.95,
       pitch: -0.04,
       fov: 90,
-      scroll: 0.73,
+      scroll: 1,
       hotspots: [
-        { label: '记忆照片墙', sub: '12 段已确认回忆', yaw: 1.02, pitch: 0.05, scene: 5 },
-        { label: '讲述者原声', sub: '真实录音依据', yaw: -2.05, pitch: -0.08, go: 's-interview' },
-        { label: 'AI 对话', sub: '非本人 · 有依据回答', yaw: 0.35, pitch: -0.16, toast: 'AI 对话只使用爸爸已确认的记忆' },
-        { label: '家族相册', sub: '持续的记忆计划', yaw: 1.55, pitch: -0.08, go: 's-plan' }
-      ]
-    },
-    {
-      id: 'memory-wall',
-      title: '照片墙前',
-      stage: '记忆照片墙 · 点亮一段往事',
-      src: 'assets/panoramas/memory-wall.webp',
-      thumb: 'assets/panoramas/memory-wall-thumb.webp',
-      yaw: 0,
-      pitch: 0.02,
-      fov: 86,
-      scroll: 0.92,
-      hotspots: [
-        { label: '老房子的故事', sub: '1986 · 仓山', yaw: 0, pitch: 0.13, detail: 'm1' },
-        { label: '听听爸爸的声音', sub: '真实原声 · 02:36', yaw: 0.42, pitch: -0.2, toast: '原声已保存 · 老房子的故事' },
-        { label: '走进记忆长廊', sub: '查看全部 12 段', yaw: -0.45, pitch: -0.16, go: 's-gallery' }
+        { label: '立体收音机', sub: '陈老先生原声 · 02:10', yaw: 0.95, pitch: 0.08, audio: true },
+        { label: '翻开人生之书', sub: '新增了文儒坊章节', yaw: 0.36, pitch: -0.12, go: 's-book' }
       ]
     }
   ];
@@ -128,8 +78,8 @@
   loaderEl.className = 'pano-loader';
   loaderEl.innerHTML = `
     <div class="pano-loader__eyebrow">PHOTO-REAL MEMORY SPACE</div>
-    <div class="pano-loader__title">正在唤醒林家的老宅</div>
-    <div class="pano-loader__sub">院落先抵达，堂屋会在漫步时继续加载</div>
+    <div class="pano-loader__title">正在唤醒陈家的院落</div>
+    <div class="pano-loader__sub">院落、房门与房间正在依次抵达</div>
     <div class="pano-loader__track"><i class="pano-loader__bar"></i></div>
     <div class="pano-loader__value">04%</div>`;
   room.appendChild(loaderEl);
@@ -158,10 +108,6 @@
     nodeNav.appendChild(button);
   });
 
-  const overviewButton = document.createElement('button');
-  overviewButton.type = 'button';
-  overviewButton.className = 'pano-overview-trigger';
-  overviewButton.innerHTML = '<svg class="icon" aria-hidden="true"><use href="#i-photo"/></svg><span>全景总览</span>';
   const introSkip = document.createElement('button');
   introSkip.type = 'button';
   introSkip.className = 'pano-intro-skip';
@@ -171,37 +117,36 @@
   const heroIntroEl = document.createElement('div');
   heroIntroEl.className = 'pano-hero-intro';
   heroIntroEl.hidden = true;
-  heroIntroEl.innerHTML = '<img src="assets/hero/courtyard-overlook.png" alt="徽派院落、院门和心形树的高处俯瞰全景">';
+  heroIntroEl.innerHTML = '<img src="assets/hero/courtyard-overlook.png" alt="陈家徽派院落、院门和中央庭院的高处俯瞰全景">';
 
-  const lookControls = document.createElement('div');
-  lookControls.className = 'pano-look-controls';
-  lookControls.setAttribute('aria-label', '全景视角控制');
-  lookControls.innerHTML = `
-    <button type="button" data-look="up" aria-label="向上看"><svg class="icon" aria-hidden="true"><use href="#i-up"/></svg></button>
-    <button type="button" data-look="left" aria-label="向左看"><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg></button>
-    <button type="button" data-look="right" aria-label="向右看"><svg class="icon" aria-hidden="true"><use href="#i-chev"/></svg></button>
-    <button type="button" data-look="down" aria-label="向下看"><svg class="icon" aria-hidden="true"><use href="#i-down"/></svg></button>`;
+  room.append(gradeEl, grainEl, heroIntroEl, curtainEl, progressEl, qualityEl, nodeNav);
 
-  const overviewEl = document.createElement('div');
-  overviewEl.className = 'pano-overview';
-  overviewEl.setAttribute('role', 'dialog');
-  overviewEl.setAttribute('aria-modal', 'true');
-  overviewEl.setAttribute('aria-label', '院落全景总览');
-  overviewEl.innerHTML = `
-    <div class="pano-overview__panel">
-      <div class="pano-overview__head"><strong>院落全景总览</strong><span>2:1 · 360° SPHERE</span><button type="button" class="pano-overview__close" aria-label="关闭全景总览"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button></div>
-      <img src="${SCENES[0].src}" alt="林家徽派院落、心形树与四周建筑的完整二比一球面全景">
-      <p>网页中的画面是这张球面全景的透视切片。左右环视一整圈，上下可以看到屋顶、天空和脚下石板。</p>
-    </div>`;
+  // WebGL 不可用或首图加载失败时的静态降级：俯瞰图 + 三个入口（落实 Product-Spec 承诺）
+  function showPanoFallback(reason) {
+    legacyError.hidden = true;
+    loaderEl.classList.add('is-done');
+    const fallback = document.createElement('div');
+    fallback.className = 'pano-fallback';
+    fallback.innerHTML = '<img src="assets/hero/courtyard-overlook.png" alt="陈家院落静态俯瞰图">'
+      + '<div class="pano-fallback__card"><small>STATIC MODE</small><h2>3D 家馆暂不可用</h2>'
+      + `<p>${reason}已切换为静态俯瞰模式，长廊与人生之书不受影响。</p>`
+      + '<div class="pano-fallback__keys"><button type="button" data-go="s-gallery">记忆长廊</button><button type="button" data-go="s-book">人生之书</button><button type="button" data-go="s-family">返回家人首页</button></div></div>';
+    room.appendChild(fallback);
+  }
 
-  room.append(gradeEl, grainEl, heroIntroEl, curtainEl, progressEl, qualityEl, nodeNav, overviewButton, introSkip, lookControls, overviewEl);
-
-  const renderer = new T.WebGLRenderer({
-    canvas,
-    antialias: true,
-    alpha: false,
-    powerPreference: 'high-performance'
-  });
+  let renderer;
+  try {
+    renderer = new T.WebGLRenderer({
+      canvas,
+      antialias: true,
+      alpha: false,
+      powerPreference: 'high-performance'
+    });
+  } catch (error) {
+    console.error(error);
+    showPanoFallback('当前设备不支持 WebGL，');
+    return;
+  }
   renderer.outputEncoding = T.sRGBEncoding;
   renderer.toneMapping = T.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.0;
@@ -226,6 +171,71 @@
     scene.add(mesh);
     return mesh;
   });
+
+  const radioLabel = document.createElement('div');
+  radioLabel.className = 'pano-radio-label';
+  radioLabel.innerHTML = '<i class="led led--green"></i>房间里的 3D 收音机';
+  radioLabel.hidden = true;
+  room.appendChild(radioLabel);
+
+  scene.add(new T.HemisphereLight(0xffe7c5, 0x18100b, 1.25));
+  const radioLight = new T.DirectionalLight(0xffd19a, 1.45);
+  radioLight.position.set(3, 5, 4);
+  scene.add(radioLight);
+  const radio = new T.Group();
+  let radioSpeaker = null;
+  let radioNeedle = null;
+  const radioMaterial = (color, roughness = 0.72, emissive = 0x000000) => new T.MeshStandardMaterial({ color, roughness, metalness: 0.04, emissive, transparent: true, opacity: 1, depthTest: false, depthWrite: false });
+  const radioBox = (size, position, material, parent = radio) => {
+    const mesh = new T.Mesh(new T.BoxGeometry(...size), material);
+    mesh.position.set(...position);
+    mesh.renderOrder = 5;
+    parent.add(mesh);
+    return mesh;
+  };
+  const walnut = radioMaterial(0x4f2f1d, 0.66);
+  const walnutDark = radioMaterial(0x25160f, 0.82);
+  const brass = radioMaterial(0xc99a55, 0.34);
+  const glass = radioMaterial(0x2b2119, 0.22, 0x4b2c12);
+  radioBox([2.15, 1.22, 0.68], [0, 0, 0], walnut);
+  radioBox([1.96, 0.98, 0.08], [0, 0, 0.38], walnutDark);
+  radioBox([0.78, 0.28, 0.06], [0.43, 0.23, 0.44], glass);
+  radioNeedle = radioBox([0.035, 0.2, 0.035], [0.22, 0.23, 0.49], brass);
+  const speakerFrame = new T.Mesh(new T.CylinderGeometry(0.38, 0.38, 0.08, 48), brass);
+  speakerFrame.rotation.x = Math.PI / 2;
+  speakerFrame.position.set(-0.56, -0.08, 0.42);
+  speakerFrame.renderOrder = 6;
+  radio.add(speakerFrame);
+  radioSpeaker = new T.Mesh(new T.CylinderGeometry(0.31, 0.31, 0.09, 48), radioMaterial(0x17110d, 0.9));
+  radioSpeaker.rotation.x = Math.PI / 2;
+  radioSpeaker.position.set(-0.56, -0.08, 0.47);
+  radioSpeaker.renderOrder = 7;
+  radio.add(radioSpeaker);
+  for (let line = -3; line <= 3; line += 1) {
+    const grille = radioBox([0.58, 0.018, 0.018], [-0.56, -0.08 + line * 0.075, 0.535], brass);
+    grille.renderOrder = 8;
+  }
+  [-0.2, 0.43, 0.7].forEach((x, index) => {
+    const knob = new T.Mesh(new T.CylinderGeometry(index ? 0.09 : 0.12, index ? 0.09 : 0.12, 0.1, 24), brass);
+    knob.rotation.x = Math.PI / 2;
+    knob.position.set(x, -0.31, 0.46);
+    knob.renderOrder = 7;
+    radio.add(knob);
+  });
+  const antenna = new T.Mesh(new T.CylinderGeometry(0.015, 0.015, 1.35, 10), brass);
+  antenna.position.set(0.78, 0.94, 0);
+  antenna.rotation.z = -0.42;
+  antenna.renderOrder = 5;
+  radio.add(antenna);
+  radioBox([0.92, 0.07, 0.08], [0, 0.76, 0], brass);
+  radioBox([0.07, 0.31, 0.08], [-0.43, 0.63, 0], brass);
+  radioBox([0.07, 0.31, 0.08], [0.43, 0.63, 0], brass);
+  radio.scale.setScalar(0.62);
+  radio.position.copy(directionFor(0.95, -0.18, 3.25));
+  radio.lookAt(new T.Vector3(0, 0, 0));
+  radio.rotateY(0.13);
+  radio.visible = false;
+  scene.add(radio);
 
   const textures = new Map();
   let currentScene = -1;
@@ -311,9 +321,9 @@
   function transitionMode(from, to) {
     const fromId = SCENES[from]?.id || '';
     const toId = SCENES[to]?.id || '';
-    if (fromId === 'hall-threshold' || toId === 'hall-threshold' || (fromId === 'heart-tree' && toId === 'hall-center')) return 'door';
-    if (fromId === 'memory-wall' || toId === 'memory-wall') return 'gallery';
-    return 'tree';
+    if (fromId === 'courtyard-aerial' && toId === 'hall-threshold') return 'push';
+    if (fromId === 'hall-threshold' || toId === 'hall-center') return 'door';
+    return 'push';
   }
 
   function finishOpeningIntro() {
@@ -452,8 +462,7 @@
       texture = await loadTexture(index);
     } catch (error) {
       console.error(error);
-      legacyError.hidden = false;
-      legacyError.querySelector('small').textContent = `场景加载失败：${error.message}`;
+      showPanoFallback('场景资源加载失败，');
       return;
     }
     if (token !== transitionToken || requestedScene !== index) return;
@@ -481,6 +490,8 @@
       button.innerHTML = `<span class="pano-hotspot__ring"></span><span class="pano-hotspot__text">${hotspot.label}<small>${hotspot.sub}</small></span>`;
       button.addEventListener('click', event => {
         event.stopPropagation();
+        if (hotspot.audio === 'door') window.SG?.unlockAudio();
+        else if (hotspot.audio) window.SG?.toggleAudio({ restart: true });
         if (Number.isInteger(hotspot.scene)) scrollToScene(hotspot.scene);
         else if (hotspot.go) window.SG?.go(hotspot.go);
         else if (hotspot.detail) window.SG?.openDetail(hotspot.detail);
@@ -494,9 +505,13 @@
   function updateSceneUI(index) {
     const node = SCENES[index];
     const last = index === SCENES.length - 1;
+    const insideRoom = index >= 2;
+    room.classList.toggle('is-inside-room', insideRoom);
+    radio.visible = insideRoom;
+    radioLabel.hidden = !insideRoom;
     stageChip.innerHTML = `<span class="led ${last ? 'on-g' : 'on-a'}"></span><span>${node.stage}</span>`;
     [...nodeNav.children].forEach((button, i) => button.classList.toggle('is-active', i === index));
-    arrival.classList.toggle('is-on', last);
+    arrival.classList.toggle('is-on', insideRoom);
   }
 
   function sceneForProgress(progress) {
@@ -608,6 +623,14 @@
     camera.updateProjectionMatrix();
     camera.position.set(Math.cos(yaw) * 0.025, Math.sin(pitch) * 0.015, Math.sin(yaw) * 0.025);
     camera.lookAt(directionFor(yaw, pitch, 1));
+    if (radio.visible) {
+      const playing = document.body.classList.contains('is-audio-playing');
+      const pulse = playing ? 1 + Math.sin(now * 0.018) * 0.035 : 1;
+      radioSpeaker.scale.set(pulse, pulse, 1);
+      radioNeedle.position.x = playing ? 0.22 + Math.sin(now * 0.0022) * 0.24 : 0.22;
+      glass.emissiveIntensity = playing ? 0.72 + Math.sin(now * 0.008) * 0.14 : 0.22;
+      radioLight.intensity = playing ? 1.65 : 1.25;
+    }
     renderHotspots();
     renderer.render(scene, camera);
     updateQuality(now);
@@ -620,27 +643,7 @@
     velocityYaw = velocityPitch = 0;
   }
 
-  overviewButton.addEventListener('click', () => {
-    overviewEl.classList.add('is-on');
-    overviewEl.querySelector('.pano-overview__close').focus();
-  });
-  overviewEl.addEventListener('click', event => {
-    if (event.target === overviewEl || event.target.closest('.pano-overview__close')) {
-      overviewEl.classList.remove('is-on');
-      overviewButton.focus();
-    }
-  });
   introSkip.addEventListener('click', skipOpeningIntro);
-  lookControls.addEventListener('click', event => {
-    const button = event.target.closest('[data-look]');
-    if (!button) return;
-    const stepYaw = T.MathUtils.degToRad(32);
-    const stepPitch = T.MathUtils.degToRad(20);
-    if (button.dataset.look === 'left') nudgeView(-stepYaw, 0);
-    if (button.dataset.look === 'right') nudgeView(stepYaw, 0);
-    if (button.dataset.look === 'up') nudgeView(0, stepPitch);
-    if (button.dataset.look === 'down') nudgeView(0, -stepPitch);
-  });
 
   room.addEventListener('pointerdown', event => {
     if (cinema || event.target.closest('button')) return;
@@ -686,11 +689,6 @@
 
   document.addEventListener('keydown', event => {
     if (!sec.classList.contains('is-active')) return;
-    if (event.key === 'Escape' && overviewEl.classList.contains('is-on')) {
-      overviewEl.classList.remove('is-on');
-      overviewButton.focus();
-      return;
-    }
     const stepYaw = T.MathUtils.degToRad(18);
     const stepPitch = T.MathUtils.degToRad(14);
     if (event.key === 'ArrowLeft') nudgeView(-stepYaw, 0);
@@ -736,6 +734,13 @@
         cinema: cinema?.kind || null,
         maxPitch: MAX_PITCH,
         fov: camera.fov,
+        radio: {
+          visible: radio.visible,
+          position: radio.position.toArray(),
+          scale: radio.scale.toArray(),
+          children: radio.children.length,
+          projected: radio.position.clone().project(camera).toArray()
+        },
         layerOpacity: materials.map(item => item.opacity),
         pixelRatio,
         loaded: textures.size
@@ -760,8 +765,6 @@
     })
     .catch(error => {
       console.error(error);
-      loaderEl.querySelector('.pano-loader__title').textContent = '场景没有成功抵达';
-      loaderEl.querySelector('.pano-loader__sub').textContent = error.message;
-      legacyError.hidden = false;
+      showPanoFallback('场景资源加载失败，');
     });
 })();

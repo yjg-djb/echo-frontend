@@ -57,7 +57,7 @@
       id: 'hall-center',
       title: '陈老先生的房间',
       stage: '房间之内 · 3D 收音机正在播放回忆',
-      src: 'assets/panoramas/hall-center.webp?v=15',
+      src: 'assets/panoramas/hall-center.webp?v=16',
       thumb: 'assets/panoramas/hall-center-thumb.webp',
       yaw: -0.19,
       pitch: -0.04,

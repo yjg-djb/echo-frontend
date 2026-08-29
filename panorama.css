@@ -179,7 +179,5 @@
   .pano-grain{display:none}
 }
 
-#glRoom .pano-node-nav{gap:0;padding:1px 3px}
-#glRoom .pano-node-nav button,#glRoom .pano-node-nav button.is-active{position:relative;width:44px;height:44px;border-radius:50%;background:transparent;box-shadow:none}
-#glRoom .pano-node-nav button::before{content:"";position:absolute;left:50%;top:50%;width:9px;height:9px;transform:translate(-50%,-50%);border-radius:50%;background:rgba(37,41,51,.3);box-shadow:inset 0 0 0 1px rgba(255,255,255,.3);transition:width .22s,background .22s,box-shadow .22s}
-#glRoom .pano-node-nav button.is-active::before{width:28px;border-radius:7px;background:var(--accent);box-shadow:0 0 12px rgba(255,105,56,.5)}
+/* 用户要求：隐藏 360° 家馆的场景圆点指示器（镜头切换由纵向滚动承担） */
+#glRoom .pano-node-nav{display:none!important}

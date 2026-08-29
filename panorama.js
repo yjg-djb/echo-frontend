@@ -64,7 +64,7 @@
       fov: 90,
       scroll: 1,
       hotspots: [
-        { label: '立体收音机', sub: '陈老先生原声 · 02:10', yaw: -0.19, pitch: -0.02, audio: true },
+        { label: '立体收音机', sub: '陈老先生原声 · 02:10', yaw: -0.19, pitch: -0.06, audio: true },
         { label: '翻开人生之书', sub: '新增了文儒坊章节', yaw: 0.36, pitch: -0.12, go: 's-book' }
       ]
     }
@@ -187,24 +187,45 @@
   const radioMaterial = (color, roughness = 0.72) => new T.MeshStandardMaterial({ color, roughness, metalness: 0.04, transparent: true, opacity: 1, depthTest: false, depthWrite: false });
   const radioWood = radioMaterial(0x2f1a10, 0.68);
   const radioWoodTop = radioMaterial(0x4a2a16, 0.58);
-  const radioFace = new T.MeshStandardMaterial({ color: 0x241206, roughness: 0.85, metalness: 0.02, transparent: true, opacity: 1, depthTest: false, depthWrite: false });
+  const radioBezel = radioMaterial(0x1d0f08, 0.45);
+  const radioFace = new T.MeshStandardMaterial({ color: 0x241206, roughness: 0.78, metalness: 0.02, transparent: true, opacity: 1, depthTest: false, depthWrite: false });
   const radioBody = new T.Mesh(new T.BoxGeometry(2.15, 1.22, 0.68), [radioWood, radioWood, radioWoodTop, radioWood, radioFace, radioWood]);
   radioBody.renderOrder = 5;
   radioBody.position.y = 0.08;
   radio.add(radioBody);
+  // 深木外框：四条边外凸于面板，形成层次
+  const bezelV = new T.BoxGeometry(0.11, 1.24, 0.06);
+  const bezelH = new T.BoxGeometry(2.29, 0.11, 0.06);
+  [[-1.065, 0.08], [1.065, 0.08]].forEach(([x, y]) => {
+    const strip = new T.Mesh(bezelV, radioBezel);
+    strip.position.set(x, y, 0.37);
+    strip.renderOrder = 6;
+    radio.add(strip);
+  });
+  [[0, 0.645], [0, -0.485]].forEach(([x, y]) => {
+    const strip = new T.Mesh(bezelH, radioBezel);
+    strip.position.set(x, y, 0.37);
+    strip.renderOrder = 6;
+    radio.add(strip);
+  });
+  // 照片面板内嵌于框中
+  const facePlate = new T.Mesh(new T.BoxGeometry(2.13, 1.06, 0.05), radioFace);
+  facePlate.position.set(0, 0.08, 0.345);
+  facePlate.renderOrder = 6;
+  radio.add(facePlate);
   new T.TextureLoader().load('assets/room/radio-front.webp', texture => {
     texture.encoding = T.sRGBEncoding;
     radioFace.map = texture;
     radioFace.color.set(0xffffff);
     radioFace.needsUpdate = true;
   });
-  // 播放指示灯：面板右上角小绿灯，播放时点亮呼吸（整机静止不震动）
+  // 播放指示灯：外框上沿小绿灯，播放时点亮呼吸（整机静止不震动）
   const radioLed = new T.Mesh(new T.BoxGeometry(0.055, 0.055, 0.02), new T.MeshStandardMaterial({ color: 0x1d3a24, emissive: 0x27c25a, emissiveIntensity: 0.12, transparent: true, opacity: 1, depthTest: false, depthWrite: false }));
-  radioLed.position.set(0.88, 0.46, 0.35);
-  radioLed.renderOrder = 6;
+  radioLed.position.set(0.94, 0.645, 0.4);
+  radioLed.renderOrder = 7;
   radio.add(radioLed);
   radio.scale.setScalar(0.5);
-  radio.position.copy(directionFor(-0.19, -0.26, 3.25));
+  radio.position.copy(directionFor(-0.19, -0.31, 3.25));
   radio.lookAt(new T.Vector3(0, 0, 0));
   radio.rotateY(0.13);
   radio.visible = false;

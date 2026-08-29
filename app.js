@@ -906,11 +906,12 @@
       this.book.visible = view !== 'package';
       this.package.visible = view !== 'book';
       if (view === 'set') {
-        this.book.position.set(-2.75, 0.18, 0.45);
-        this.book.rotation.y = -0.17;
-        this.package.position.set(2.7, -0.16, -0.25);
-        this.package.rotation.y = 0.12;
-        this.distance = 1.32;
+        // 函套开口朝右前方，书脊朝开口、半插入函套（呈抽出状态），不再并排摆放
+        this.package.position.set(0.55, -0.05, -0.35);
+        this.package.rotation.y = 0.16;
+        this.book.position.set(3.15, -0.02, -0.15);
+        this.book.rotation.y = Math.PI + 0.16;
+        this.distance = 1.3;
       } else {
         this.book.position.set(0, 0, 0);
         this.book.rotation.y = 0;

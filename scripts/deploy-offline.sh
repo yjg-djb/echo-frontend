@@ -24,7 +24,8 @@ docker compose up -d
 healthy=0
 for _ in $(seq 1 30); do
   if curl -fsS "http://127.0.0.1:${PORT}/healthz" >/dev/null && \
-     curl -fsS "http://127.0.0.1:${PORT}/" | grep -q '时光回响'; then
+     page_body="$(curl -fsS "http://127.0.0.1:${PORT}/")" && \
+     grep -q '时光回响' <<<"${page_body}"; then
     healthy=1
     break
   fi

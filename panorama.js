@@ -183,53 +183,21 @@
   radioLight.position.set(3, 5, 4);
   scene.add(radioLight);
   const radio = new T.Group();
-  let radioSpeaker = null;
-  let radioNeedle = null;
-  const radioMaterial = (color, roughness = 0.72, emissive = 0x000000) => new T.MeshStandardMaterial({ color, roughness, metalness: 0.04, emissive, transparent: true, opacity: 1, depthTest: false, depthWrite: false });
-  const radioBox = (size, position, material, parent = radio) => {
-    const mesh = new T.Mesh(new T.BoxGeometry(...size), material);
-    mesh.position.set(...position);
-    mesh.renderOrder = 5;
-    parent.add(mesh);
-    return mesh;
-  };
-  const walnut = radioMaterial(0x4f2f1d, 0.66);
-  const walnutDark = radioMaterial(0x25160f, 0.82);
-  const brass = radioMaterial(0xc99a55, 0.34);
-  const glass = radioMaterial(0x2b2119, 0.22, 0x4b2c12);
-  radioBox([2.15, 1.22, 0.68], [0, 0, 0], walnut);
-  radioBox([1.96, 0.98, 0.08], [0, 0, 0.38], walnutDark);
-  radioBox([0.78, 0.28, 0.06], [0.43, 0.23, 0.44], glass);
-  radioNeedle = radioBox([0.035, 0.2, 0.035], [0.22, 0.23, 0.49], brass);
-  const speakerFrame = new T.Mesh(new T.CylinderGeometry(0.38, 0.38, 0.08, 48), brass);
-  speakerFrame.rotation.x = Math.PI / 2;
-  speakerFrame.position.set(-0.56, -0.08, 0.42);
-  speakerFrame.renderOrder = 6;
-  radio.add(speakerFrame);
-  radioSpeaker = new T.Mesh(new T.CylinderGeometry(0.31, 0.31, 0.09, 48), radioMaterial(0x17110d, 0.9));
-  radioSpeaker.rotation.x = Math.PI / 2;
-  radioSpeaker.position.set(-0.56, -0.08, 0.47);
-  radioSpeaker.renderOrder = 7;
-  radio.add(radioSpeaker);
-  for (let line = -3; line <= 3; line += 1) {
-    const grille = radioBox([0.58, 0.018, 0.018], [-0.56, -0.08 + line * 0.075, 0.535], brass);
-    grille.renderOrder = 8;
-  }
-  [-0.2, 0.43, 0.7].forEach((x, index) => {
-    const knob = new T.Mesh(new T.CylinderGeometry(index ? 0.09 : 0.12, index ? 0.09 : 0.12, 0.1, 24), brass);
-    knob.rotation.x = Math.PI / 2;
-    knob.position.set(x, -0.31, 0.46);
-    knob.renderOrder = 7;
-    radio.add(knob);
+  // 实物收音机（红星牌 QD-602 实拍照片）做成立体盒体：正面贴实拍照，其余面深胡桃木色
+  const radioMaterial = (color, roughness = 0.72) => new T.MeshStandardMaterial({ color, roughness, metalness: 0.04, transparent: true, opacity: 1, depthTest: false, depthWrite: false });
+  const radioWood = radioMaterial(0x2f1a10, 0.68);
+  const radioWoodTop = radioMaterial(0x4a2a16, 0.58);
+  const radioFace = new T.MeshStandardMaterial({ color: 0x241206, roughness: 0.85, metalness: 0.02, transparent: true, opacity: 1, depthTest: false, depthWrite: false });
+  const radioBody = new T.Mesh(new T.BoxGeometry(2.15, 1.22, 0.68), [radioWood, radioWood, radioWoodTop, radioWood, radioFace, radioWood]);
+  radioBody.renderOrder = 5;
+  radioBody.position.y = 0.08;
+  radio.add(radioBody);
+  new T.TextureLoader().load('assets/room/radio-front.webp', texture => {
+    texture.encoding = T.sRGBEncoding;
+    radioFace.map = texture;
+    radioFace.color.set(0xffffff);
+    radioFace.needsUpdate = true;
   });
-  const antenna = new T.Mesh(new T.CylinderGeometry(0.015, 0.015, 1.35, 10), brass);
-  antenna.position.set(0.78, 0.94, 0);
-  antenna.rotation.z = -0.42;
-  antenna.renderOrder = 5;
-  radio.add(antenna);
-  radioBox([0.92, 0.07, 0.08], [0, 0.76, 0], brass);
-  radioBox([0.07, 0.31, 0.08], [-0.43, 0.63, 0], brass);
-  radioBox([0.07, 0.31, 0.08], [0.43, 0.63, 0], brass);
   radio.scale.setScalar(0.62);
   radio.position.copy(directionFor(0.95, -0.18, 3.25));
   radio.lookAt(new T.Vector3(0, 0, 0));
@@ -625,10 +593,9 @@
     camera.lookAt(directionFor(yaw, pitch, 1));
     if (radio.visible) {
       const playing = document.body.classList.contains('is-audio-playing');
-      const pulse = playing ? 1 + Math.sin(now * 0.018) * 0.035 : 1;
-      radioSpeaker.scale.set(pulse, pulse, 1);
-      radioNeedle.position.x = playing ? 0.22 + Math.sin(now * 0.0022) * 0.24 : 0.22;
-      glass.emissiveIntensity = playing ? 0.72 + Math.sin(now * 0.008) * 0.14 : 0.22;
+      const pulse = playing ? 1 + Math.sin(now * 0.012) * 0.014 : 1;
+      radioBody.scale.set(pulse, pulse, 1 + (pulse - 1) * 2.2);
+      radio.rotation.z = playing ? Math.sin(now * 0.0011) * 0.014 : 0;
       radioLight.intensity = playing ? 1.65 : 1.25;
     }
     renderHotspots();

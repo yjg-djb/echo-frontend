@@ -245,6 +245,7 @@
     next.scrollTop = 0;
     sourceOf[id] = previousId;
     currentScreen = id;
+    document.body.dataset.screen = id;
     if (options.replace) historyStack[historyStack.length - 1] = id;
     else if (!options.back) historyStack.push(id);
     setShell(next);

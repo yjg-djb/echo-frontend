@@ -45,12 +45,10 @@
     }
   }
 
-  // 来源感知返回：家馆/书/定制间的返回键跟随真实来路，而不是写死目的地
+  // 返回目标：人生之书固定回家馆，其余页面按来源返回
   function updateBackTargets(id) {
     const homeBack = $('#s-home [aria-label="返回家人首页"]');
     if (id === 's-home' && homeBack) homeBack.dataset.go = sourceOf['s-home'] === 's-elder-home' ? 's-elder-home' : 's-family';
-    const bookBack = $('#s-book [aria-label="放回书架"]');
-    if (id === 's-book' && bookBack) bookBack.dataset.go = sourceOf['s-book'] || 's-gallery';
     const customBack = $('#s-book-customize [aria-label="返回阅读"]');
     if (id === 's-book-customize' && customBack) customBack.dataset.go = sourceOf['s-book-customize'] === 's-me' ? 's-me' : 's-book';
   }
@@ -118,30 +116,11 @@
     { id: 'teahouse-1978', title: '台江的老茶馆', year: '1978 年', place: '台江', type: 'photo', image: 'assets/memories/1978-teahouse.webp', audio: 'assets/memories/1978-taijiang-teahouse.wav', duration: 23, story: '下班以后常去码头边的茶馆，一壶茶两毛钱，能坐一晚上听人讲古。后来茶馆拆了，那条街也不在了。' },
     { id: 'wedding-1979', title: '结婚那年的合影', year: '1979 年', place: '福州', type: 'voice', audio: 'assets/memories/1979-wedding.wav', duration: 19, story: '结婚那天没有婚纱，借了同事的中山装去照相馆。照片里两个人都不敢笑，其实心里高兴得很。' },
     { id: 'chuanzheng-1982', title: '船政的码头', year: '1982 年', place: '马尾', type: 'photo', image: 'assets/memories/1982-shipyard.webp', story: '高高的吊机、船上的彩旗，还有船台周围密密的人群。大家仰头望着准备下水的船，那是许多工人共同完成的一件大事。' },
-    { id: 'xiaolin-1983', title: '小林出生的冬天', year: '1983 年', place: '福州', type: 'voice', audio: 'assets/memories/1983-xiaolin-birth.wav', duration: 18, story: '那年冬天特别冷，去医院的路上骑车摔了一跤。抱到孩子的时候，什么都忘了。' },
-    { id: 'move-in-1986', title: '搬进老房子的那天', year: '1986 年', place: '福州', type: 'photo', image: 'assets/memories/1986-old-house.webp', audio: 'assets/memories/1986-move-in.wav', duration: 20, story: '搬家那天，一家人先把旧木桌搬进客厅。那张桌子后来吃了三十年的饭，桌角还有小林小时候刻的字。' },
+    { id: 'xiaolin-1983', title: '小陈出生的冬天', year: '1983 年', place: '福州', type: 'voice', audio: 'assets/memories/1983-xiaolin-birth.wav', duration: 18, story: '那年冬天特别冷，去医院的路上骑车摔了一跤。抱到孩子的时候，什么都忘了。' },
+    { id: 'move-in-1986', title: '搬进老房子的那天', year: '1986 年', place: '福州', type: 'photo', image: 'assets/memories/1986-old-house.webp', audio: 'assets/memories/1986-move-in.wav', duration: 20, story: '搬家那天，一家人先把旧木桌搬进客厅。那张桌子后来吃了三十年的饭，桌角还有小陈小时候刻的字。' },
     { id: 'typhoon-1990', title: '台风夜守屋', year: '1990 年', place: '福州', type: 'voice', audio: 'assets/memories/1990-typhoon-night.wav', duration: 18, story: '那年台风大，瓦片被掀掉了一半。一家人拿盆接水接了一整夜，天亮以后邻居们互相帮着上房修瓦。' },
     { id: 'teahouse-1994', title: '台江老茶馆', year: '1994 年', place: '台江', type: 'photo', image: 'assets/memories/1994-teahouse.webp', story: '门前自行车一辆接一辆，行人从商店和街口之间来来往往。街道不算宽，却装得下许多人热热闹闹的日常。' },
     { id: 'retirement-tea-2012', title: '退休那天的茶', year: '2012 年', place: '福州', type: 'voice', audio: 'assets/memories/2012-retirement-tea.wav', duration: 17, story: '那天同事们送了一罐茉莉花茶。回家泡了一壶，坐在门口喝到天黑，觉得这辈子也没白忙。' }
-  ];
-
-  // 城市照片墙：15 张福州老照片（按年份排序），图片与旁白来自素材包「照片墙_福州老照片」
-  const wallPhotos = [
-    { id: 'wuyi-square-1982', title: '五一广场', year: '1982 年', place: '福州', image: 'assets/photo-wall/wuyi-square-1982.webp', audio: 'assets/wall/w01-wuyi-square-1982.wav', duration: 39, story: '1982年的五一广场，还没有后来那么热闹。宽宽的路一直铺到远处，路边的灯柱、石墩，还有背后的青山，都显得格外清楚。那时走在广场上，脚步慢一点，连风吹过来的方向都记得住。' },
-    { id: 'dongjiekou-1983', title: '东街口', year: '1983 年', place: '福州', image: 'assets/photo-wall/dongjiekou-1983.webp', audio: 'assets/wall/w02-dongjiekou-1983.wav', duration: 38, story: '从高处看1983年的东街口，老屋密密地连在一起，几座高楼已经开始从屋顶间长出来。街道藏在房子中间，人们每天就在这些巷口和路口穿行。城市的变化，往往就是这样，一点一点出现在熟悉的天际线上。' },
-    { id: 'tea-factory-1984', title: '福州茶厂', year: '1984 年', place: '福州', image: 'assets/photo-wall/tea-factory-1984.webp', audio: 'assets/wall/w12-tea-factory-1984.wav', duration: 34, story: '这是1984年福州茶厂留下的一张集体照。大家站得整整齐齐，有人微笑，有人安静地看着镜头。多年以后，再看这样的照片，最让人怀念的往往不是厂房，而是曾经一起上班、一起说笑的那些面孔。' },
-    { id: 'taijiang-store-1985', title: '台江百货', year: '1985 年', place: '台江', image: 'assets/photo-wall/taijiang-store-1985.webp', audio: 'assets/wall/w13-taijiang-store-1985.wav', duration: 33, story: '1985年的台江百货门前，自行车一辆接一辆，行人从商店和街口之间来来往往。那时候买东西要慢慢挑，遇见熟人还会停下来聊几句。街道不算宽，却装得下许多人热热闹闹的日常。' },
-    { id: 'mawei-shipyard-1986', title: '马尾造船厂全景', year: '1986 年', place: '马尾', image: 'assets/photo-wall/mawei-shipyard-1986.webp', audio: 'assets/wall/w03-mawei-shipyard-1986.wav', duration: 30, story: '这是1986年冬天的马尾造船厂。江边立着一排排吊机，厂房和船台铺展开来，一眼就能看出这里的忙碌。远处是水，近处是机器，许多人的一天，就在汽笛声和敲击声里开始。' },
-    { id: 'minjun2-launch-1986', title: '闽浚二号下水', year: '1986 年', place: '马尾', image: 'assets/photo-wall/minjun2-launch-1986.webp', audio: 'assets/wall/w04-minjun2-launch-1986.wav', duration: 41, story: '1986年12月23日，闽浚二号准备下水。高高的吊机、船上的彩旗，还有船台周围密密的人群，把这一天围得格外热闹。大家仰头望着这艘船，等的不只是一次下水，也是许多工人共同完成的一件大事。' },
-    { id: 'rongcheng-street-1991', title: '榕城古街', year: '1991 年', place: '福州', image: 'assets/photo-wall/rongcheng-street-1991.webp', audio: 'assets/wall/w14-rongcheng-street-1991.wav', duration: 39, story: '1991年的榕城古街，两边店铺挨得很近，招牌一块接着一块。骑车的、推车的、买东西的人都在同一条街上穿行。这样的老街总有自己的声音，车铃、叫卖和脚步声混在一起，就是当年的市井生活。' },
-    { id: 'wuyi-road-1991', title: '五一路口', year: '1991 年', place: '福州', image: 'assets/photo-wall/wuyi-road-1991.webp', audio: 'assets/wall/w15-wuyi-road-1991.wav', duration: 40, story: '这是1991年的五一路口。公交车、汽车和自行车在路上交错，电线杆沿着街边一直伸向远处。城市已经明显快了起来，可人们骑车回家、等车上班的身影，仍是那个年代最寻常也最真实的风景。' },
-    { id: 'chuanzheng-130-1996', title: '船政 130 周年研讨会', year: '1996 年', place: '马尾', image: 'assets/photo-wall/ship-administration-130-1996.webp', audio: 'assets/wall/w05-chuanzheng-130-1996.wav', duration: 37, story: '1996年冬天，纪念船政创办一百三十周年的研讨会在这里举行。人们围着长桌坐下，把散落在档案、厂房和记忆里的故事重新讲出来。老地方有了新的变化，可那些关于造船、求学和报国的往事，仍需要一代代人认真保存。' },
-    { id: 'navy-reunion-1996', title: '海峡两岸海军将领相聚', year: '1996 年', place: '马尾', image: 'assets/photo-wall/naval-reunion-1996.webp', audio: 'assets/wall/w06-navy-reunion-1996.wav', duration: 35, story: '这张照片记录了1996年冬天的一次相聚。两位老人站在一起，翻看手里的资料，神情专注又亲切。隔着岁月和海峡，共同的历史仍能让人坐下来，把过去的故事慢慢说清楚。' },
-    { id: 'chuanzheng-academy-1997', title: '船政绘事院', year: '1997 年', place: '马尾', image: 'assets/photo-wall/drawing-academy-1997.webp', audio: 'assets/wall/w10-chuanzheng-academy-1997.wav', duration: 37, story: '这是1997年的船政绘事院。红砖墙、旧屋顶和外面的金属管线，让这座建筑显得安静又坚实。过去，许多图样和构想从这里落到纸上，再一步步变成真正能够下水航行的船。' },
-    { id: 'no2-dock-1997', title: '二号船坞修复扩建', year: '1997 年', place: '马尾', image: 'assets/photo-wall/dock2-1997.webp', audio: 'assets/wall/w11-no2-dock-1997.wav', duration: 34, story: '1997年，二号船坞正在修复扩建。船坞里停着船，周围布满吊机、脚手架和施工设备，整个场面紧张而有秩序。修的是一座船坞，接起来的却是老船厂继续向前走的路。' },
-    { id: 'changle-airport-1997', title: '长乐国际机场通航', year: '1997 年', place: '长乐', image: 'assets/photo-wall/changle-airport-1997.webp', audio: 'assets/wall/w07-changle-airport-1997.wav', duration: 38, story: '1997年，长乐国际机场迎来通航时刻。飞机从远处缓缓落下，跑道旁站满了人，鲜艳的旗帜在风里飘着。那一天，大家抬头看着天空，也像是在看福州通向更远地方的新路。' },
-    { id: 'mawei-site-1998', title: '船政遗址上的马尾造船厂', year: '1998 年', place: '马尾', image: 'assets/photo-wall/mawei-shipyard-1998.webp', audio: 'assets/wall/w09-mawei-site-1998.wav', duration: 43, story: '1998年的马尾造船厂，老建筑和厂区道路整整齐齐地铺在船政遗址上。屋顶、烟囱和树木交错在一起，让人同时看见历史和生产生活留下的痕迹。这里不是一张静止的旧照片，而是一段仍在继续的工业记忆。' },
-    { id: 'chen-daozhang-2000', title: '轮机车间里的陈道章', year: '2000 年', place: '马尾', image: 'assets/photo-wall/chen-daozhang-2000.webp', audio: 'assets/wall/w08-chen-daozhang-2000.wav', duration: 37, story: '照片里的陈道章站在船政轮机车间，身边是熟悉的机器和管线。他伸手指着设备，像是在讲一件做过无数遍、却仍然不能马虎的工作。老师傅的经验不只写在图纸上，也藏在每一次观察、倾听和动手之间。' }
   ];
 
   // 家人编辑的问题（单源数据）：默认取第 1 问，编辑后贯通到邀请预览、长辈页与家人首页
@@ -193,7 +172,7 @@
   }
 
   async function shareInterviewLink() {
-    const data = { title: '小林邀请您聊聊往事', text: '爸，想请您看看文儒坊这张旧照片，聊聊当年的故事。', url: interviewShareUrl() };
+    const data = { title: '小陈邀请您聊聊往事', text: '爸，想请您看看文儒坊这张旧照片，聊聊当年的故事。', url: interviewShareUrl() };
     if (navigator.share) {
       try {
         await navigator.share(data);
@@ -268,7 +247,7 @@
   let detailEntry = null;
 
   function findEntry(id) {
-    return memories.find(item => item.id === id) || wallPhotos.find(item => item.id === id);
+    return memories.find(item => item.id === id);
   }
 
   function openDetail(id) {
@@ -511,7 +490,7 @@
       this.hud = $('.hud', section);
       this.arrival = $('.hud__arrival', section);
       this.spacer = $('.hall__spacer', section);
-      this.length = 9100;
+      this.length = 5500;
       this.maxScroll = this.length - 330;
       this.camera = { x: 0, z: 260, yaw: 0 };
       this.target = { x: 0, z: 0, yaw: 0 };
@@ -568,25 +547,8 @@
         this.items.push(lightbox);
         this.items.push(this.add('pool', z + 60, `transform:translate3d(${x}px,0,${z + 60}px) rotateX(90deg) translateY(-160px)`));
       });
-      const wallGate = this.add('wallgate', -5085, `left:-200px;top:-145px;transform:translateZ(-5085px)`);
-      wallGate.innerHTML = '<span>FUZHOU CITY MEMORY WALL</span><b>福州 · 城市照片墙</b><small>15 张城市老照片 · 点击灯箱收听旁白</small>';
-      this.items.push(wallGate);
-      wallPhotos.forEach((photo, index) => {
-        const x = index % 2 ? 118 : -118;
-        const z = -5820 - index * 215;
-        const angle = index % 2 ? -18 : 18;
-        const lightbox = this.add('lb lb--photo lb--city', z, `left:${x - 66}px;top:-16px;transform:translateZ(${z}px) rotateY(${angle}deg)`);
-        lightbox.innerHTML = `<div class="lb__face"><img src="${photo.image}" alt="${photo.title}" loading="lazy" decoding="async"><i class="lb__city-tag" aria-hidden="true">福州照片墙</i></div><div class="lb__base"></div><div class="lb__cap"><b>${photo.title}</b>${photo.year}</div>`;
-        lightbox.dataset.memory = photo.id;
-        lightbox.dataset.x = String(x);
-        lightbox.addEventListener('click', event => {
-          event.stopPropagation();
-          this.focus(lightbox);
-        });
-        this.items.push(lightbox);
-      });
       const endWall = this.add('endwall', -this.length, `transform:translateZ(${-this.length}px)`);
-      endWall.innerHTML = `<div class="end-title"><b>人生之书</b><small>CHEN FAMILY · 14 MEMORIES · 15 CITY PHOTOS</small></div><div class="end-shelf"><button class="end-book" data-go="s-book">陈老先生<br>的人生故事<small>取下翻阅</small></button></div>`;
+      endWall.innerHTML = `<div class="end-title"><b>人生之书</b><small>CHEN FAMILY · 14 MEMORIES</small></div><div class="end-shelf"><button class="end-book" data-go="s-book">陈老先生<br>的人生故事<small>取下翻阅</small></button></div>`;
       this.items.push(endWall);
       for (let index = 0; index < 18; index += 1) {
         const x = Math.round(Math.sin(index * 7.3) * 170);
@@ -1173,12 +1135,11 @@
     openDetail,
     unlockAudio,
     toggleAudio,
-    memories,
-    wallPhotos
+    memories
   };
 
   if (new URLSearchParams(location.search).get('invite') === 'chen-wenrufang') {
-    document.title = '小林邀请您聊聊往事 · 时光回响';
+    document.title = '小陈邀请您聊聊往事 · 时光回响';
     go('s-elder-invite', { replace: true });
   }
 })();

@@ -45,12 +45,12 @@
       stage: '房间门口 · 推门后开始播放回忆',
       src: 'assets/panoramas/hall-threshold.webp',
       thumb: 'assets/panoramas/hall-threshold-thumb.webp',
-      yaw: -1.44,
+      yaw: 0,
       pitch: -0.02,
       fov: 90,
       scroll: 0.5,
       hotspots: [
-        { label: '推开这扇门', sub: '进入房间并播放陈老先生原声', yaw: -1.44, pitch: -0.02, scene: 2, audio: 'door' }
+        { label: '推开这扇门', sub: '进入房间并播放陈老先生原声', yaw: 0, pitch: -0.02, scene: 2, audio: 'door' }
       ]
     },
     {
@@ -94,9 +94,6 @@
   const progressEl = document.createElement('div');
   progressEl.className = 'pano-progress';
   progressEl.innerHTML = '<i></i>';
-  const qualityEl = document.createElement('div');
-  qualityEl.className = 'pano-quality';
-  qualityEl.textContent = 'IPHONE · HIGH';
   const nodeNav = document.createElement('div');
   nodeNav.className = 'pano-node-nav';
   nodeNav.setAttribute('aria-label', '写实家馆观景点');
@@ -119,7 +116,7 @@
   heroIntroEl.hidden = true;
   heroIntroEl.innerHTML = '<img src="assets/hero/courtyard-overlook.png" alt="陈家徽派院落、院门和中央庭院的高处俯瞰全景">';
 
-  room.append(gradeEl, grainEl, heroIntroEl, curtainEl, progressEl, qualityEl, nodeNav);
+  room.append(gradeEl, grainEl, heroIntroEl, curtainEl, progressEl, nodeNav);
 
   // WebGL 不可用或首图加载失败时的静态降级：俯瞰图 + 三个入口（落实 Product-Spec 承诺）
   function showPanoFallback(reason) {
@@ -589,11 +586,9 @@
     if (fps < 28 && pixelRatio > 1) {
       pixelRatio = Math.max(1, pixelRatio - 0.25);
       resize();
-      qualityEl.textContent = 'IPHONE · BALANCED';
     } else if (fps > 48 && pixelRatio < Math.min(devicePixelRatio || 1, 1.75)) {
       pixelRatio = Math.min(1.75, pixelRatio + 0.25);
       resize();
-      qualityEl.textContent = 'IPHONE · HIGH';
     }
     frameCount = 0;
     frameWindow = now;

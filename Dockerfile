@@ -10,9 +10,7 @@ COPY assets/memories /usr/share/nginx/html/assets/memories
 COPY assets/panoramas /usr/share/nginx/html/assets/panoramas
 COPY assets/room /usr/share/nginx/html/assets/room
 COPY assets/people /usr/share/nginx/html/assets/people
-COPY assets/photo-wall /usr/share/nginx/html/assets/photo-wall
 COPY assets/story /usr/share/nginx/html/assets/story
-COPY assets/wall /usr/share/nginx/html/assets/wall
 
 EXPOSE 80
 

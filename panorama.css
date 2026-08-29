@@ -112,11 +112,6 @@
 .pano-hotspot__text{min-width:0;font-size:13px;font-weight:650;line-height:1.2;white-space:nowrap}
 .pano-hotspot__text small{display:block;margin-top:2px;font-size:10px;font-weight:450;color:var(--ink-soft)}
 
-.pano-quality{
-  position:absolute;right:16px;top:143px;z-index:8;padding:5px 8px;border-radius:8px;color:var(--ink-soft);
-  background:rgba(246,248,250,.86);border:1px solid rgba(255,255,255,.7);font:500 9px/1 var(--font-read);letter-spacing:.12em;pointer-events:none
-}
-
 .pano-overview-trigger,.pano-intro-skip{
   position:absolute;z-index:9;min-height:44px;border:1px solid rgba(255,255,255,.76);color:var(--ink);cursor:pointer;
   background:rgba(246,248,250,.9);box-shadow:-4px -4px 10px rgba(255,255,255,.55),6px 8px 18px rgba(37,41,51,.2);
@@ -170,7 +165,6 @@
   .pano-hotspot{max-width:164px;padding:6px 9px 6px 7px}
   .pano-hotspot__text{font-size:12px}
   .pano-progress{top:139px}
-  .pano-quality{top:145px}
   .pano-look-controls{bottom:148px}
   .pano-overview-trigger{bottom:151px}
 }

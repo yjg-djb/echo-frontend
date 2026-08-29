@@ -17,10 +17,6 @@ $RequiredFiles = @(
   'assets/interview/a1.wav',
   'assets/interview/a8.wav',
   'assets/audio/chen-wenrufang.wav',
-  'assets/photo-wall/wuyi-square-1982.webp',
-  'assets/wall/w01-wuyi-square-1982.wav',
-  'assets/photo-wall/wuyi-road-1991.webp',
-  'assets/wall/w15-wuyi-road-1991.wav',
   'assets/panoramas/courtyard-overlook-360.webp',
   'assets/panoramas/hall-center.webp',
   'Product-Spec.md',
@@ -57,7 +53,6 @@ $RequiredMarkers = @(
   'confirmStateBadge',
   'privacyScopeToggle',
   'wenrufang-1978',
-  '城市照片墙',
   '走进记忆长廊',
   '蓝印白布',
   '制作实体书',
@@ -94,7 +89,7 @@ if (-not $PanoJs.Contains('showPanoFallback')) {
 }
 
 $App = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $ProjectRoot 'app.js')
-foreach ($AppMarker in @('assets/interview/q1.wav', 'assets/memories/1960-summer-wharf.webp', 'assets/photo-wall/wuyi-road-1991.webp', '1978-wenrufang.wav', 'sourceOf', 'askState', 'pressFeedback')) {
+foreach ($AppMarker in @('assets/interview/q1.wav', 'assets/memories/1960-summer-wharf.webp', '1978-wenrufang.wav', 'sourceOf', 'askState', 'pressFeedback')) {
   if (-not $App.Contains($AppMarker)) {
     throw "app.js 缺少素材引用：$AppMarker"
   }
@@ -110,15 +105,9 @@ if ($InterviewClips.Count -ne 16) {
   throw "采访原声不完整：仅发现 $($InterviewClips.Count) / 16 个 wav"
 }
 
-$WallImages = Get-ChildItem -LiteralPath (Join-Path $ProjectRoot 'assets/photo-wall') -Filter '*.webp'
-$WallAudio = Get-ChildItem -LiteralPath (Join-Path $ProjectRoot 'assets/wall') -Filter '*.wav'
-if ($WallImages.Count -ne 15 -or $WallAudio.Count -ne 15) {
-  throw "照片墙素材不完整：图片 $($WallImages.Count) / 15，旁白 $($WallAudio.Count) / 15"
-}
-
 $Panoramas = Get-ChildItem -LiteralPath (Join-Path $ProjectRoot 'assets/panoramas') -Filter '*.webp'
 if ($Panoramas.Count -lt 12) {
   throw "360° 全景资源不完整：仅发现 $($Panoramas.Count) 个 WebP 文件"
 }
 
-Write-Host "验证通过：页面结构、脚本语法、采访原声 16 段、照片墙 15 组与 360° 全景资源均完整。"
+Write-Host "验证通过：页面结构、脚本语法、采访原声 16 段、记忆长廊与 360° 全景资源均完整。"

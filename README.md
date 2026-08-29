@@ -26,6 +26,12 @@ docker compose up -d --build
 
 容器监听宿主机 `8080`，健康检查为 `http://127.0.0.1:8080/healthz`。服务器更新脚本位于 `scripts/deploy-server.sh`，会检查端口所有者、保存旧镜像并在冒烟失败时回滚。
 
+已登录服务器后也可以运行一阶段向导：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/yjg-djb/echo-frontend/main/scripts/deploy-wizard.sh | bash
+```
+
 ## 场景
 
 1. 院落高点

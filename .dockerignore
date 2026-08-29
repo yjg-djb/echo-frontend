@@ -1,0 +1,9 @@
+.git
+.gitignore
+output
+assets/source
+src
+scripts
+ASSET_PROMPTS.md
+README.md
+docker-compose.yml

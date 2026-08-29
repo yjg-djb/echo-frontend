@@ -45,12 +45,12 @@
       stage: '房间门口 · 推门后开始播放回忆',
       src: 'assets/panoramas/hall-threshold.webp',
       thumb: 'assets/panoramas/hall-threshold-thumb.webp',
-      yaw: 0.26,
+      yaw: -0.07,
       pitch: -0.02,
       fov: 90,
       scroll: 0.5,
       hotspots: [
-        { label: '推开这扇门', sub: '进入房间并播放陈老先生原声', yaw: 0.26, pitch: -0.02, scene: 2, audio: 'door' }
+        { label: '推开这扇门', sub: '进入房间并播放陈老先生原声', yaw: -0.07, pitch: -0.02, scene: 2, audio: 'door' }
       ]
     },
     {

@@ -64,7 +64,7 @@
       fov: 90,
       scroll: 1,
       hotspots: [
-        { label: '立体收音机', sub: '陈老先生原声 · 02:10', yaw: -0.19, pitch: -0.06, audio: true },
+        { label: '立体收音机', sub: '陈老先生原声 · 02:10', yaw: -0.22, pitch: -0.12, audio: true },
         { label: '翻开人生之书', sub: '新增了文儒坊章节', yaw: 0.36, pitch: -0.12, go: 's-book' }
       ]
     }
@@ -224,8 +224,8 @@
   radioLed.position.set(0.94, 0.645, 0.4);
   radioLed.renderOrder = 7;
   radio.add(radioLed);
-  radio.scale.setScalar(0.5);
-  radio.position.copy(directionFor(-0.19, -0.31, 3.25));
+  radio.scale.setScalar(0.42);
+  radio.position.copy(directionFor(-0.22, -0.38, 3.25));
   radio.lookAt(new T.Vector3(0, 0, 0));
   radio.rotateY(0.13);
   radio.visible = false;

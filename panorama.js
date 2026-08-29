@@ -57,7 +57,7 @@
       id: 'hall-center',
       title: '陈老先生的房间',
       stage: '房间之内 · 3D 收音机正在播放回忆',
-      src: 'assets/panoramas/hall-center.webp',
+      src: 'assets/panoramas/hall-center.webp?v=15',
       thumb: 'assets/panoramas/hall-center-thumb.webp',
       yaw: -0.19,
       pitch: -0.04,
@@ -501,7 +501,7 @@
     const last = index === SCENES.length - 1;
     const insideRoom = index >= 2;
     room.classList.toggle('is-inside-room', insideRoom);
-    radio.visible = insideRoom;
+    radio.visible = false; // 收音机已烘焙进全景贴图（用户合成版），3D 模型退役
     radioLabel.hidden = !insideRoom;
     stageChip.innerHTML = `<span class="led ${last ? 'on-g' : 'on-a'}"></span><span>${node.stage}</span>`;
     [...nodeNav.children].forEach((button, i) => button.classList.toggle('is-active', i === index));

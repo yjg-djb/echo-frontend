@@ -58,69 +58,69 @@
     {
       question: '您先看看，站在文儒坊门洞旁边的这个人，是您吗？',
       answer: '是我。那时候大概五十岁，头发还没怎么白。照片是我女儿拍的，她从亲戚那里借来一台相机，说一定要在文儒坊门口给我留一张。',
-      questionAudio: 'assets/interview/q1.wav', questionDuration: 4.3,
-      answerAudio: 'assets/interview/a1.wav', answerDuration: 15.4
+      questionAudio: 'assets/interview/q1.mp3', questionDuration: 4.3,
+      answerAudio: 'assets/interview/a1.mp3', answerDuration: 15.4
     },
     {
       question: '女儿为什么特别想在这个门口给您拍照？',
       answer: '她那年准备去外地读书。我们家虽然不在门洞正对面，但每天进进出出都要经过这里。她说以后想家的时候，看见这个门，就知道家在后面。',
-      questionAudio: 'assets/interview/q2.wav', questionDuration: 3.7,
-      answerAudio: 'assets/interview/a2.wav', answerDuration: 19.4
+      questionAudio: 'assets/interview/q2.mp3', questionDuration: 3.7,
+      answerAudio: 'assets/interview/a2.mp3', answerDuration: 19.4
     },
     {
       question: '您那时候每天经过这道门，通常是去做什么？',
       answer: '早上出去买菜，上班也从这里走。女儿小时候上学，我还会送她到巷口。晚上回来，远远看见“文儒坊”三个字，心里就知道到家了。',
-      questionAudio: 'assets/interview/q3.wav', questionDuration: 4.5,
-      answerAudio: 'assets/interview/a3.wav', answerDuration: 14.7
+      questionAudio: 'assets/interview/q3.mp3', questionDuration: 4.5,
+      answerAudio: 'assets/interview/a3.mp3', answerDuration: 14.7
     },
     {
       question: '您刚说早上出去买菜，那时文儒坊一早最先听见的是什么声音？',
       answer: '先是各家开木门的声音，接着是自行车铃，还有卖菜人推车经过石板路的声音。巷子不宽，谁家起来得早，附近几户人都听得见。',
-      questionAudio: 'assets/interview/q4.wav', questionDuration: 5.1,
-      answerAudio: 'assets/interview/a4.wav', answerDuration: 15.2
+      questionAudio: 'assets/interview/q4.mp3', questionDuration: 5.1,
+      answerAudio: 'assets/interview/a4.mp3', answerDuration: 15.2
     },
     {
       question: '照片里的墙面有不少水痕，下雨时这段路好走吗？',
       answer: '青石板一沾水就有点滑。大家走得慢，碰见老人还会提醒一句。雨大的时候，水顺着屋檐往下滴，走到门洞这里，雨声会突然变得特别响。',
-      questionAudio: 'assets/interview/q5.wav', questionDuration: 4.2,
-      answerAudio: 'assets/interview/a5.wav', answerDuration: 13.0
+      questionAudio: 'assets/interview/q5.mp3', questionDuration: 4.2,
+      answerAudio: 'assets/interview/a5.mp3', answerDuration: 13.0
     },
     {
       question: '您说街坊见面会互相提醒，当时谁最常坐在门口和大家说话？',
       answer: '隔壁有位林依姆，天气好的时候常坐在门边择菜。孩子放学回来，她一眼就认得是谁家的。哪家大人回来晚，她也会帮忙看着孩子一会儿。',
-      questionAudio: 'assets/interview/q6.wav', questionDuration: 5.9,
-      answerAudio: 'assets/interview/a6.wav', answerDuration: 16.0
+      questionAudio: 'assets/interview/q6.mp3', questionDuration: 5.9,
+      answerAudio: 'assets/interview/a6.mp3', answerDuration: 16.0
     },
     {
       question: '后来再回到文儒坊，您最先发现什么变了？',
       answer: '房子修整过了，路也比以前干净，来参观的人多了。以前这里首先是大家生活的地方，现在大家更愿意停下来看看它的历史。',
-      questionAudio: 'assets/interview/q7.wav', questionDuration: 3.7,
-      answerAudio: 'assets/interview/a7.wav', answerDuration: 17.0
+      questionAudio: 'assets/interview/q7.mp3', questionDuration: 3.7,
+      answerAudio: 'assets/interview/a7.mp3', answerDuration: 17.0
     },
     {
       question: '如果把这张照片留给晚辈，您最想让他们知道什么？',
       answer: '我想让他们知道，我们记住一个地方，不只是记住一块牌匾或者一座老房子。每天从这里走过、碰见什么人、听见什么声音，这些普通日子加在一起，才是我们说的家。',
-      questionAudio: 'assets/interview/q8.wav', questionDuration: 5.4,
-      answerAudio: 'assets/interview/a8.wav', answerDuration: 20.2
+      questionAudio: 'assets/interview/q8.mp3', questionDuration: 5.4,
+      answerAudio: 'assets/interview/a8.mp3', answerDuration: 20.2
     }
   ];
 
   // 记忆长廊：14 个年代节点（1960—2012），图片/原声均来自素材包「回忆长廊」，文案来自同名 txt
   const memories = [
-    { id: 'pier-1960', title: '夏天的仓山码头', year: '1960 年', place: '仓山', type: 'photo', image: 'assets/memories/1960-summer-wharf.webp', audio: 'assets/memories/1960-cangshan-pier.wav', duration: 21, story: '小时候一到暑假就往码头跑，看船进港，捡掉在地上的荔枝壳玩。哪一年记不清了，只记得那时候江水很清。' },
-    { id: 'fishball-1965', title: '奶奶做的鱼丸', year: '1965 年', place: '福州', type: 'photo', image: 'assets/memories/1965-fish-balls.webp', audio: 'assets/memories/1965-grandma-yuwan.wav', duration: 18, story: '奶奶做鱼丸要先把鱼肉刮下来，用刀背捶一个钟头。过年才吃得上，一人分五个，小孩总想多要一个。' },
-    { id: 'radio-1968', title: '第一台收音机', year: '1968 年', place: '福州', type: 'photo', image: 'assets/memories/1968-radio.webp', audio: 'assets/memories/1968-first-radio.wav', duration: 18, story: '家里第一台收音机是二手的，天线要用铁丝接长。每天晚上全家围着听评话，声音小得要凑着耳朵。' },
-    { id: 'buddy-1970', title: '码头上的老伙计', year: '1970 年', place: '码头', type: 'photo', image: 'assets/memories/1970-old-partner.webp', audio: 'assets/memories/1970-pier-buddy.wav', duration: 16, story: '货运队里最要好的是老陈，两个人搭档扛了八年货。后来他去了厦门，每年过年还会寄一张贺卡来。' },
-    { id: 'first-job-1975', title: '年轻时的第一份工作', year: '1975 年', place: '福州', type: 'photo', image: 'assets/memories/1975-first-job.webp', audio: 'assets/memories/1975-first-job.wav', duration: 35, story: '年轻那会儿进了厂，第一次站到车床前，师傅只叮嘱我手要稳、眼要准。头一个月的工资大半交给了家里，剩下的钱买了件新衬衫——那时候觉得，能靠自己挣钱，人就算真正长大了。' },
-    { id: 'wenrufang', title: '门洞后面，就是家', year: '1978 年', place: '文儒坊', type: 'photo', image: 'assets/story/wenrufang-1978.webp', audio: 'assets/memories/1978-wenrufang.wav', duration: 15, story: '女儿临去外地读书前，在一家人每天经过的门口，为父亲留下了一张照片。木门声、自行车铃和石板路上的推车声，后来都成了他对“家”的记忆。' },
-    { id: 'teahouse-1978', title: '台江的老茶馆', year: '1978 年', place: '台江', type: 'photo', image: 'assets/memories/1978-teahouse.webp', audio: 'assets/memories/1978-taijiang-teahouse.wav', duration: 23, story: '下班以后常去码头边的茶馆，一壶茶两毛钱，能坐一晚上听人讲古。后来茶馆拆了，那条街也不在了。' },
-    { id: 'wedding-1979', title: '结婚那年的合影', year: '1979 年', place: '福州', type: 'voice', audio: 'assets/memories/1979-wedding.wav', duration: 19, story: '结婚那天没有婚纱，借了同事的中山装去照相馆。照片里两个人都不敢笑，其实心里高兴得很。' },
+    { id: 'pier-1960', title: '夏天的仓山码头', year: '1960 年', place: '仓山', type: 'photo', image: 'assets/memories/1960-summer-wharf.webp', audio: 'assets/memories/1960-cangshan-pier.mp3', duration: 21, story: '小时候一到暑假就往码头跑，看船进港，捡掉在地上的荔枝壳玩。哪一年记不清了，只记得那时候江水很清。' },
+    { id: 'fishball-1965', title: '奶奶做的鱼丸', year: '1965 年', place: '福州', type: 'photo', image: 'assets/memories/1965-fish-balls.webp', audio: 'assets/memories/1965-grandma-yuwan.mp3', duration: 18, story: '奶奶做鱼丸要先把鱼肉刮下来，用刀背捶一个钟头。过年才吃得上，一人分五个，小孩总想多要一个。' },
+    { id: 'radio-1968', title: '第一台收音机', year: '1968 年', place: '福州', type: 'photo', image: 'assets/memories/1968-radio.webp', audio: 'assets/memories/1968-first-radio.mp3', duration: 18, story: '家里第一台收音机是二手的，天线要用铁丝接长。每天晚上全家围着听评话，声音小得要凑着耳朵。' },
+    { id: 'buddy-1970', title: '码头上的老伙计', year: '1970 年', place: '码头', type: 'photo', image: 'assets/memories/1970-old-partner.webp', audio: 'assets/memories/1970-pier-buddy.mp3', duration: 16, story: '货运队里最要好的是老陈，两个人搭档扛了八年货。后来他去了厦门，每年过年还会寄一张贺卡来。' },
+    { id: 'first-job-1975', title: '年轻时的第一份工作', year: '1975 年', place: '福州', type: 'photo', image: 'assets/memories/1975-first-job.webp', audio: 'assets/memories/1975-first-job.mp3', duration: 35, story: '年轻那会儿进了厂，第一次站到车床前，师傅只叮嘱我手要稳、眼要准。头一个月的工资大半交给了家里，剩下的钱买了件新衬衫——那时候觉得，能靠自己挣钱，人就算真正长大了。' },
+    { id: 'wenrufang', title: '门洞后面，就是家', year: '1978 年', place: '文儒坊', type: 'photo', image: 'assets/story/wenrufang-1978.webp', audio: 'assets/memories/1978-wenrufang.mp3', duration: 15, story: '女儿临去外地读书前，在一家人每天经过的门口，为父亲留下了一张照片。木门声、自行车铃和石板路上的推车声，后来都成了他对“家”的记忆。' },
+    { id: 'teahouse-1978', title: '台江的老茶馆', year: '1978 年', place: '台江', type: 'photo', image: 'assets/memories/1978-teahouse.webp', audio: 'assets/memories/1978-taijiang-teahouse.mp3', duration: 23, story: '下班以后常去码头边的茶馆，一壶茶两毛钱，能坐一晚上听人讲古。后来茶馆拆了，那条街也不在了。' },
+    { id: 'wedding-1979', title: '结婚那年的合影', year: '1979 年', place: '福州', type: 'voice', audio: 'assets/memories/1979-wedding.mp3', duration: 19, story: '结婚那天没有婚纱，借了同事的中山装去照相馆。照片里两个人都不敢笑，其实心里高兴得很。' },
     { id: 'chuanzheng-1982', title: '船政的码头', year: '1982 年', place: '马尾', type: 'photo', image: 'assets/memories/1982-shipyard.webp', story: '高高的吊机、船上的彩旗，还有船台周围密密的人群。大家仰头望着准备下水的船，那是许多工人共同完成的一件大事。' },
-    { id: 'xiaolin-1983', title: '小陈出生的冬天', year: '1983 年', place: '福州', type: 'voice', audio: 'assets/memories/1983-xiaolin-birth.wav', duration: 18, story: '那年冬天特别冷，去医院的路上骑车摔了一跤。抱到孩子的时候，什么都忘了。' },
-    { id: 'move-in-1986', title: '搬进老房子的那天', year: '1986 年', place: '福州', type: 'photo', image: 'assets/memories/1986-old-house.webp', audio: 'assets/memories/1986-move-in.wav', duration: 20, story: '搬家那天，一家人先把旧木桌搬进客厅。那张桌子后来吃了三十年的饭，桌角还有小陈小时候刻的字。' },
-    { id: 'typhoon-1990', title: '台风夜守屋', year: '1990 年', place: '福州', type: 'voice', audio: 'assets/memories/1990-typhoon-night.wav', duration: 18, story: '那年台风大，瓦片被掀掉了一半。一家人拿盆接水接了一整夜，天亮以后邻居们互相帮着上房修瓦。' },
+    { id: 'xiaolin-1983', title: '小陈出生的冬天', year: '1983 年', place: '福州', type: 'voice', audio: 'assets/memories/1983-xiaolin-birth.mp3', duration: 18, story: '那年冬天特别冷，去医院的路上骑车摔了一跤。抱到孩子的时候，什么都忘了。' },
+    { id: 'move-in-1986', title: '搬进老房子的那天', year: '1986 年', place: '福州', type: 'photo', image: 'assets/memories/1986-old-house.webp', audio: 'assets/memories/1986-move-in.mp3', duration: 20, story: '搬家那天，一家人先把旧木桌搬进客厅。那张桌子后来吃了三十年的饭，桌角还有小陈小时候刻的字。' },
+    { id: 'typhoon-1990', title: '台风夜守屋', year: '1990 年', place: '福州', type: 'voice', audio: 'assets/memories/1990-typhoon-night.mp3', duration: 18, story: '那年台风大，瓦片被掀掉了一半。一家人拿盆接水接了一整夜，天亮以后邻居们互相帮着上房修瓦。' },
     { id: 'teahouse-1994', title: '台江老茶馆', year: '1994 年', place: '台江', type: 'photo', image: 'assets/memories/1994-teahouse.webp', story: '门前自行车一辆接一辆，行人从商店和街口之间来来往往。街道不算宽，却装得下许多人热热闹闹的日常。' },
-    { id: 'retirement-tea-2012', title: '退休那天的茶', year: '2012 年', place: '福州', type: 'voice', audio: 'assets/memories/2012-retirement-tea.wav', duration: 17, story: '那天同事们送了一罐茉莉花茶。回家泡了一壶，坐在门口喝到天黑，觉得这辈子也没白忙。' }
+    { id: 'retirement-tea-2012', title: '退休那天的茶', year: '2012 年', place: '福州', type: 'voice', audio: 'assets/memories/2012-retirement-tea.mp3', duration: 17, story: '那天同事们送了一罐茉莉花茶。回家泡了一壶，坐在门口喝到天黑，觉得这辈子也没白忙。' }
   ];
 
   // 家人编辑的问题（单源数据）：默认取第 1 问，编辑后贯通到邀请预览、长辈页与家人首页

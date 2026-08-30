@@ -70,7 +70,7 @@ img{display:block;max-width:100%}
 
 /* ---- 家人首页 ---- */
 .family-home{color:var(--ink);background:var(--canvas)}
-.family-home::before{content:"";position:absolute;left:14px;right:14px;top:calc(var(--sat) + 80px);height:252px;border:1px solid rgba(255,255,255,.76);border-radius:var(--radius-xl);background:url("assets/hero/courtyard-overlook.png") center/cover no-repeat;box-shadow:var(--shadow)}
+.family-home::before{content:"";position:absolute;left:14px;right:14px;top:calc(var(--sat) + 80px);height:252px;border:1px solid rgba(255,255,255,.76);border-radius:var(--radius-xl);background:url("assets/hero/courtyard-overlook.webp") center/cover no-repeat;box-shadow:var(--shadow)}
 .family-home>*{position:relative}
 .family-hero{padding:calc(var(--sat) + 80px + 252px + 22px) 20px 20px}
 .hero-kicker{display:flex;align-items:center;gap:9px;margin-bottom:14px;font:700 11px/1 var(--font-body);letter-spacing:.06em;color:var(--ink-soft)}

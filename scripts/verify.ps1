@@ -9,14 +9,14 @@ $RequiredFiles = @(
   'panorama.css',
   'vendor/three.min.js',
   'assets/story/wenrufang-1978.webp',
-  'assets/memories/1978-wenrufang.wav',
+  'assets/memories/1978-wenrufang.mp3',
   'assets/memories/1982-shipyard.webp',
-  'assets/memories/2012-retirement-tea.wav',
-  'assets/interview/q1.wav',
-  'assets/interview/q8.wav',
-  'assets/interview/a1.wav',
-  'assets/interview/a8.wav',
-  'assets/audio/chen-wenrufang.wav',
+  'assets/memories/2012-retirement-tea.mp3',
+  'assets/interview/q1.mp3',
+  'assets/interview/q8.mp3',
+  'assets/interview/a1.mp3',
+  'assets/interview/a8.mp3',
+  'assets/audio/chen-wenrufang.mp3',
   'assets/panoramas/courtyard-overlook-360.webp',
   'assets/panoramas/hall-center.webp',
   'Product-Spec.md',
@@ -56,7 +56,7 @@ $RequiredMarkers = @(
   '走进记忆长廊',
   '蓝印白布',
   '制作实体书',
-  'chen-wenrufang.wav'
+  'chen-wenrufang.mp3'
 )
 
 foreach ($Marker in $RequiredMarkers) {
@@ -89,18 +89,18 @@ if (-not $PanoJs.Contains('showPanoFallback')) {
 }
 
 $App = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $ProjectRoot 'app.js')
-foreach ($AppMarker in @('assets/interview/q1.wav', 'assets/memories/1960-summer-wharf.webp', '1978-wenrufang.wav', 'sourceOf', 'askState', 'pressFeedback')) {
+foreach ($AppMarker in @('assets/interview/q1.mp3', 'assets/memories/1960-summer-wharf.webp', '1978-wenrufang.mp3', 'sourceOf', 'askState', 'pressFeedback')) {
   if (-not $App.Contains($AppMarker)) {
     throw "app.js 缺少素材引用：$AppMarker"
   }
 }
 
-$RadioAudio = Get-Item -LiteralPath (Join-Path $ProjectRoot 'assets/audio/chen-wenrufang.wav')
-if ($RadioAudio.Length -lt 500000) {
+$RadioAudio = Get-Item -LiteralPath (Join-Path $ProjectRoot 'assets/audio/chen-wenrufang.mp3')
+if ($RadioAudio.Length -lt 80000) {
   throw "收音机原声文件异常：$($RadioAudio.Length) bytes"
 }
 
-$InterviewClips = Get-ChildItem -LiteralPath (Join-Path $ProjectRoot 'assets/interview') -Filter '*.wav'
+$InterviewClips = Get-ChildItem -LiteralPath (Join-Path $ProjectRoot 'assets/interview') -Filter '*.mp3'
 if ($InterviewClips.Count -ne 16) {
   throw "采访原声不完整：仅发现 $($InterviewClips.Count) / 16 个 wav"
 }

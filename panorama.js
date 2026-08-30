@@ -114,7 +114,7 @@
   const heroIntroEl = document.createElement('div');
   heroIntroEl.className = 'pano-hero-intro';
   heroIntroEl.hidden = true;
-  heroIntroEl.innerHTML = '<img src="assets/hero/courtyard-overlook.png" alt="陈家徽派院落、院门和中央庭院的高处俯瞰全景">';
+  heroIntroEl.innerHTML = '<img src="assets/hero/courtyard-overlook.webp" alt="陈家徽派院落、院门和中央庭院的高处俯瞰全景">';
 
   room.append(gradeEl, grainEl, heroIntroEl, curtainEl, progressEl, nodeNav);
 
@@ -124,7 +124,7 @@
     loaderEl.classList.add('is-done');
     const fallback = document.createElement('div');
     fallback.className = 'pano-fallback';
-    fallback.innerHTML = '<img src="assets/hero/courtyard-overlook.png" alt="陈家院落静态俯瞰图">'
+    fallback.innerHTML = '<img src="assets/hero/courtyard-overlook.webp" alt="陈家院落静态俯瞰图">'
       + '<div class="pano-fallback__card"><small>STATIC MODE</small><h2>3D 家馆暂不可用</h2>'
       + `<p>${reason}已切换为静态俯瞰模式，长廊与人生之书不受影响。</p>`
       + '<div class="pano-fallback__keys"><button type="button" data-go="s-gallery">记忆长廊</button><button type="button" data-go="s-book">人生之书</button><button type="button" data-go="s-family">返回家人首页</button></div></div>';
@@ -494,6 +494,7 @@
   }
 
   function updateSceneUI(index) {
+    window.dispatchEvent(new CustomEvent('manor-scene', { detail: { scene: index } }));
     const node = SCENES[index];
     const last = index === SCENES.length - 1;
     const insideRoom = index >= 2;
@@ -703,6 +704,7 @@
     deactivate() {
       active = false;
       cancelAnimationFrame(raf);
+      window.dispatchEvent(new CustomEvent('manor-scene', { detail: { scene: -1 } }));
     },
     goTo(index) {
       scrollToScene(index);

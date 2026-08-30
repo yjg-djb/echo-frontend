@@ -231,7 +231,7 @@
     updateNavigation(id);
     updateBackTargets(id);
     activateEngines(previousId, id);
-    if (id === 's-interview') renderInterview();
+    if (id === 's-interview') { lastSyncRound = interviewIndex; renderInterview(); }
     if (id === 's-invite-sent') updateInterviewShareLink();
     if (id === 's-book') renderBookPage(false);
     if (id === 's-confirm' || id === 's-confirmed') updateConfirmState();
@@ -330,6 +330,38 @@
     }
   }
 
+  // 打字机流式输出：仅对新揭示的轮次生效；reduced-motion 直接全文
+  let typeTimer = 0;
+  let typedUpTo = -1;
+
+  function typeText(element, text, onDone) {
+    clearTimeout(typeTimer);
+    if (reducedMotion || !text) {
+      element.textContent = text;
+      element.classList.remove('is-typing');
+      if (onDone) onDone();
+      return;
+    }
+    let shown = 0;
+    const total = Math.max(1, Math.round(1600 / 24));
+    const stepSize = Math.max(1, Math.ceil(text.length / total));
+    element.classList.add('is-typing');
+    const step = () => {
+      shown = Math.min(text.length, shown + stepSize);
+      element.textContent = text.slice(0, shown);
+      const thread = $('#chatThread');
+      if (thread) thread.scrollTop = thread.scrollHeight;
+      if (shown < text.length) {
+        typeTimer = setTimeout(step, 24);
+      } else {
+        typeTimer = 0;
+        element.classList.remove('is-typing');
+        if (onDone) onDone();
+      }
+    };
+    typeTimer = setTimeout(step, 60);
+  }
+
   function renderInterview(index = interviewIndex) {
     interviewIndex = clamp(index, 0, interview.length - 1);
     revealedInterviewCount = Math.max(revealedInterviewCount, interviewIndex + 1);
@@ -350,6 +382,23 @@
     const nextButton = $('#nextQuestion');
     nextButton.disabled = interviewIndex === interview.length - 1;
     $('#nextQuestion span').textContent = interviewIndex === interview.length - 1 ? '追问已完成' : '继续追问';
+    clearTimeout(typeTimer);
+    if (interviewIndex > typedUpTo && currentScreen === 's-interview') {
+      typedUpTo = interviewIndex;
+      const questionEl = $('.chat-turn.is-current .chat-bubble > p', thread);
+      const answerEl = $('.chat-turn.is-current .chat-voice-card > p', thread);
+      if (questionEl && answerEl) {
+        const question = questionEl.textContent;
+        const answer = answerEl.textContent;
+        questionEl.textContent = '';
+        answerEl.textContent = '';
+        thread.scrollTop = thread.scrollHeight;
+        typeText(questionEl, question, () => typeText(answerEl, answer, () => {
+          thread.scrollTo({ top: thread.scrollHeight, behavior: 'auto' });
+        }));
+      }
+      return;
+    }
     requestAnimationFrame(() => thread.scrollTo({ top: thread.scrollHeight, behavior: reducedMotion ? 'auto' : 'smooth' }));
   }
 
@@ -372,10 +421,14 @@
     return total;
   }
 
+  let lastSyncRound = -1;
   function syncPlaybackToUI() {
     const clip = playlists[queue.mode][queue.index];
     if (!clip) return;
-    if (currentScreen === 's-interview') renderInterview(clip.round);
+    if (currentScreen === 's-interview' && clip.round !== lastSyncRound) {
+      lastSyncRound = clip.round;
+      renderInterview(clip.round);
+    }
     if ($('#roomSubtitle') && clip.kind === 'answer') $('#roomSubtitle').textContent = `“${interview[clip.round].answer}”`;
   }
 
@@ -1052,6 +1105,16 @@
     const names = { indigo: '蓝印花布书函', drawer: '深木抽拉盒', cloth: '亚麻翻盖盒' };
     $('#summaryPackage').textContent = names[bookModel.packageStyle];
   }));
+
+  // 离开屋内（场景≠房间）或离开家馆：立即停掉收音机（answers 队列）的声音
+  window.addEventListener('manor-scene', event => {
+    const scene = event.detail?.scene;
+    if (scene === 2) return;
+    if (!audio.paused && queue.mode === 'answers') {
+      audio.pause();
+      updateAudioUI();
+    }
+  });
 
   audio.addEventListener('play', updateAudioUI);
   audio.addEventListener('pause', updateAudioUI);

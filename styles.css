@@ -251,24 +251,7 @@ body:not([data-shell="family"]){--dock-h:0px}
 .pano-fallback__keys button{min-height:46px;border:1px solid rgba(255,255,255,.8);border-radius:var(--radius-sm);background:var(--surface-strong);box-shadow:var(--shadow-soft);color:var(--ink);font-size:11px;font-weight:700;cursor:pointer}
 
 /* ---- 响应式与降级 ---- */
-/* iPhone 机身壳（仅宽视口/演示投屏生效；真机 <=430 不受影响） */
-.device-chrome{display:none}
-@media(min-width:431px){
-  :root{--sat:calc(env(safe-area-inset-top) + 30px);--sab:calc(env(safe-area-inset-bottom) + 16px)}
-  body{display:grid;place-items:center;background:radial-gradient(circle at 50% 40%,#2a3038,#14171c 70%)}
-  .app{height:min(932px,96dvh);min-height:720px;border-radius:64px;border:12px solid #24262b;box-shadow:0 0 0 2.5px #43464d,0 0 0 4.5px #101215,0 34px 90px rgba(0,0,0,.55);overflow:hidden}
-  .device-chrome{display:block;position:absolute;inset:0;z-index:200;pointer-events:none}
-  .device-statusbar{position:absolute;left:0;right:0;top:0;height:46px;display:flex;align-items:center;justify-content:space-between;padding:10px 38px 0;color:var(--ink);font:650 15px/1 var(--font-body)}
-  .device-island{position:absolute;left:50%;top:13px;transform:translateX(-50%);width:118px;height:34px;border-radius:20px;background:#0a0b0d;box-shadow:inset 0 0 8px rgba(255,255,255,.04)}
-  .device-status-icons{display:flex;align-items:center;gap:7px}
-  .device-status-icons svg{display:block}
-  .device-homebar{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);width:132px;height:5px;border-radius:3px;background:rgba(120,126,134,.9)}
-  .device-btn{position:absolute;background:linear-gradient(90deg,#2c2e33,#43464d);border-radius:3px}
-  .device-btn--action{left:-15px;top:148px;width:4px;height:32px}
-  .device-btn--volup{left:-15px;top:208px;width:4px;height:58px}
-  .device-btn--voldown{left:-15px;top:276px;width:4px;height:58px}
-  .device-btn--power{right:-15px;top:228px;width:4px;height:88px}
-}
+@media(min-width:431px){body{display:grid;place-items:center;background:radial-gradient(circle at 50% 40%,#2a3038,#14171c 70%)}.app{height:min(932px,96dvh);min-height:720px;border:1px solid rgba(255,255,255,.08);border-radius:32px}}
 @media(max-width:375px){.family-hero h1{font-size:28px}.book-stage{transform:scale(.91);transform-origin:50% 0;height:565px}.book-controls{bottom:calc(var(--sab) + 38px)}.customizer-stage{height:350px}.elder-photo-card img{height:230px}}
 @media(orientation:landscape) and (max-height:600px){.app{max-width:none;height:100dvh;border-radius:0}.family-hero{padding-top:calc(var(--sat) + 60px)}.book-stage{height:460px}.single-book{top:8px;transform:translateX(-50%) scale(.82);transform-origin:top}.book-controls{left:auto;width:360px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}.book-leaf.is-turn-out{display:none}.book-leaf.is-turn-in{display:block}.waveform i{animation:none!important}:where(button,textarea,input){transform:none!important}:where(button).is-rebounding{animation:none!important}}

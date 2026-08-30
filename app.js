@@ -335,6 +335,7 @@
   let typeTimer = 0;
   let typeRaf = 0;
   let typedUpTo = -1;
+  let revealedAnswerUpTo = -1; // 已揭示回答的最大轮序号：0 秒未播放时回答不预显
   const typeState = { qEl: null, aEl: null, q: '', a: '', qN: 0, aN: 0, step: 1, active: false, everAudio: false };
 
   function stopTyping() {
@@ -353,7 +354,7 @@
     const thread = $('#chatThread');
     if (thread) thread.scrollTop = thread.scrollHeight;
     typeState.qEl?.classList.toggle('is-typing', typeState.qN < typeState.q.length);
-    typeState.aEl?.classList.toggle('is-typing', typeState.qN >= typeState.q.length && typeState.aN < typeState.a.length);
+    typeState.aEl?.classList.toggle('is-typing', !!typeState.aEl && typeState.qN >= typeState.q.length && typeState.aN < typeState.a.length);
   }
 
   function typewriterFrame() {
@@ -365,7 +366,7 @@
       const ratio = clamp((audio.currentTime || 0) / Math.max(0.2, clip.duration), 0, 1);
       if (clip.kind === 'question') {
         typeState.qN = Math.max(typeState.qN, typeState.q.length * ratio);
-      } else {
+      } else if (typeState.aEl) {
         typeState.qN = typeState.q.length;
         typeState.aN = Math.max(typeState.aN, typeState.a.length * ratio);
       }
@@ -376,7 +377,8 @@
     }
     // everAudio 且当前未播放（暂停/换源）：冻结，跟随恢复
     paintType();
-    if (typeState.qN >= typeState.q.length && typeState.aN >= typeState.a.length) {
+    const aFull = !typeState.aEl || typeState.aN >= typeState.a.length;
+    if (typeState.qN >= typeState.q.length && aFull) {
       stopTyping();
       return;
     }
@@ -394,9 +396,10 @@
           <div class="chat-avatar chat-avatar--ai"><svg class="icon" aria-hidden="true"><use href="#i-spark"/></svg></div>
           <div class="chat-bubble"><header><b>AI 采访者 · 鲁小豫</b><span>${String(index + 1).padStart(2, '0')} / ${String(interview.length).padStart(2, '0')}</span></header><p>${item.question}</p></div>
         </article>
+        ${index <= interviewIndex && index <= revealedAnswerUpTo ? `
         <article class="chat-message chat-message--human">
           <div class="chat-bubble chat-voice-card"><header><span><img src="assets/people/dad.jpg" alt=""><b>陈老先生</b></span><small>原声回答</small></header><p>${item.answer}</p><button type="button" class="chat-inline-audio" data-audio-round="${index}" aria-label="播放第 ${index + 1} 段回答"><span class="chat-mini-wave">${waveBars(28, index + 2)}</span><em>${Math.round(item.answerDuration)}s</em><svg class="icon"><use href="#i-play"/></svg></button></div>
-        </article>
+        </article>` : ''}
       </div>`).join('');
     $('#chatRound').textContent = `第 ${interviewIndex + 1} / ${interview.length} 轮`;
     $('#chatProgressBar').style.width = `${((interviewIndex + 1) / interview.length) * 100}%`;
@@ -411,20 +414,20 @@
       typedUpTo = interviewIndex;
       const questionEl = $('.chat-turn.is-current .chat-bubble > p', thread);
       const answerEl = $('.chat-turn.is-current .chat-voice-card > p', thread);
-      if (questionEl && answerEl) {
+      if (questionEl) {
         if (reducedMotion) {
           typedUpTo = interviewIndex;
         } else {
           typeState.qEl = questionEl;
           typeState.aEl = answerEl;
           typeState.q = questionEl.textContent;
-          typeState.a = answerEl.textContent;
+          typeState.a = answerEl ? answerEl.textContent : '';
           typeState.qN = 0;
           typeState.aN = 0;
           typeState.step = Math.max(1, Math.ceil(Math.max(typeState.q.length, typeState.a.length) / 70));
           typeState.everAudio = false;
           questionEl.textContent = '';
-          answerEl.textContent = '';
+          if (answerEl) answerEl.textContent = '';
           typeState.active = true;
           thread.scrollTop = thread.scrollHeight;
           typewriterFrame();
@@ -500,7 +503,13 @@
     if (!audio.src || !audio.src.endsWith(clip.src)) audio.src = clip.src;
     try {
       await audio.play();
-      if (clip.kind === 'answer') recordedRounds = Math.max(recordedRounds, clip.round + 1);
+      if (clip.kind === 'answer') {
+        recordedRounds = Math.max(recordedRounds, clip.round + 1);
+        if (clip.round > revealedAnswerUpTo) {
+          revealedAnswerUpTo = clip.round;
+          if (currentScreen === 's-interview') renderInterview(clip.round);
+        }
+      }
       syncPlaybackToUI();
       if (currentScreen === 's-interview' && queue.mode === 'full' && clip.round === interviewIndex && !typeState.active) {
         restartAudioDrivenTyping(clip);
@@ -1061,6 +1070,10 @@
     const audioJump = event.target.closest('[data-audio-round]');
     if (audioJump) {
       const round = clamp(Number(audioJump.dataset.audioRound), 0, interview.length - 1);
+      if (round > revealedAnswerUpTo) {
+        revealedAnswerUpTo = round;
+        renderInterview(interviewIndex);
+      }
       queue.mode = 'full';
       queue.index = round * 2 + 1;
       playQueueClip();

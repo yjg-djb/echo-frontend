@@ -330,36 +330,57 @@
     }
   }
 
-  // 打字机流式输出：仅对新揭示的轮次生效；reduced-motion 直接全文
+  // 打字机流式输出：播放时由音频 currentTime 驱动（念到哪打到哪）；
+  // 未播放时定时兜底逐字；暂停即冻结；reduced-motion 直接全文
   let typeTimer = 0;
+  let typeRaf = 0;
   let typedUpTo = -1;
+  const typeState = { qEl: null, aEl: null, q: '', a: '', qN: 0, aN: 0, step: 1, active: false, everAudio: false };
 
-  function typeText(element, text, onDone) {
+  function stopTyping() {
+    typeState.active = false;
     clearTimeout(typeTimer);
-    if (reducedMotion || !text) {
-      element.textContent = text;
-      element.classList.remove('is-typing');
-      if (onDone) onDone();
+    typeTimer = 0;
+    if (typeRaf) cancelAnimationFrame(typeRaf);
+    typeRaf = 0;
+    typeState.qEl?.classList.remove('is-typing');
+    typeState.aEl?.classList.remove('is-typing');
+  }
+
+  function paintType() {
+    if (typeState.qEl) typeState.qEl.textContent = typeState.q.slice(0, Math.floor(typeState.qN));
+    if (typeState.aEl) typeState.aEl.textContent = typeState.a.slice(0, Math.floor(typeState.aN));
+    const thread = $('#chatThread');
+    if (thread) thread.scrollTop = thread.scrollHeight;
+    typeState.qEl?.classList.toggle('is-typing', typeState.qN < typeState.q.length);
+    typeState.aEl?.classList.toggle('is-typing', typeState.qN >= typeState.q.length && typeState.aN < typeState.a.length);
+  }
+
+  function typewriterFrame() {
+    if (!typeState.active) return;
+    const clip = playlists[queue.mode] ? playlists[queue.mode][queue.index] : null;
+    const audioLive = !audio.paused && !audio.ended && queue.mode === 'full' && clip && clip.round === interviewIndex;
+    if (audioLive) {
+      typeState.everAudio = true;
+      const ratio = clamp((audio.currentTime || 0) / Math.max(0.2, clip.duration), 0, 1);
+      if (clip.kind === 'question') {
+        typeState.qN = Math.max(typeState.qN, typeState.q.length * ratio);
+      } else {
+        typeState.qN = typeState.q.length;
+        typeState.aN = Math.max(typeState.aN, typeState.a.length * ratio);
+      }
+    } else if (!typeState.everAudio) {
+      // 从未播放过音频（纯浏览）：定时兜底逐字
+      if (typeState.qN < typeState.q.length) typeState.qN += typeState.step;
+      else if (typeState.aN < typeState.a.length) typeState.aN += typeState.step;
+    }
+    // everAudio 且当前未播放（暂停/换源）：冻结，跟随恢复
+    paintType();
+    if (typeState.qN >= typeState.q.length && typeState.aN >= typeState.a.length) {
+      stopTyping();
       return;
     }
-    let shown = 0;
-    const total = Math.max(1, Math.round(1600 / 24));
-    const stepSize = Math.max(1, Math.ceil(text.length / total));
-    element.classList.add('is-typing');
-    const step = () => {
-      shown = Math.min(text.length, shown + stepSize);
-      element.textContent = text.slice(0, shown);
-      const thread = $('#chatThread');
-      if (thread) thread.scrollTop = thread.scrollHeight;
-      if (shown < text.length) {
-        typeTimer = setTimeout(step, 24);
-      } else {
-        typeTimer = 0;
-        element.classList.remove('is-typing');
-        if (onDone) onDone();
-      }
-    };
-    typeTimer = setTimeout(step, 60);
+    typeRaf = requestAnimationFrame(typewriterFrame);
   }
 
   function renderInterview(index = interviewIndex) {
@@ -383,21 +404,33 @@
     nextButton.disabled = interviewIndex === interview.length - 1;
     $('#nextQuestion span').textContent = interviewIndex === interview.length - 1 ? '追问已完成' : '继续追问';
     clearTimeout(typeTimer);
+    if (typeRaf) cancelAnimationFrame(typeRaf);
+    typeRaf = 0;
+    typeState.active = false;
     if (interviewIndex > typedUpTo && currentScreen === 's-interview') {
       typedUpTo = interviewIndex;
       const questionEl = $('.chat-turn.is-current .chat-bubble > p', thread);
       const answerEl = $('.chat-turn.is-current .chat-voice-card > p', thread);
       if (questionEl && answerEl) {
-        const question = questionEl.textContent;
-        const answer = answerEl.textContent;
-        questionEl.textContent = '';
-        answerEl.textContent = '';
-        thread.scrollTop = thread.scrollHeight;
-        typeText(questionEl, question, () => typeText(answerEl, answer, () => {
-          thread.scrollTo({ top: thread.scrollHeight, behavior: 'auto' });
-        }));
+        if (reducedMotion) {
+          typedUpTo = interviewIndex;
+        } else {
+          typeState.qEl = questionEl;
+          typeState.aEl = answerEl;
+          typeState.q = questionEl.textContent;
+          typeState.a = answerEl.textContent;
+          typeState.qN = 0;
+          typeState.aN = 0;
+          typeState.step = Math.max(1, Math.ceil(Math.max(typeState.q.length, typeState.a.length) / 70));
+          typeState.everAudio = false;
+          questionEl.textContent = '';
+          answerEl.textContent = '';
+          typeState.active = true;
+          thread.scrollTop = thread.scrollHeight;
+          typewriterFrame();
+          return;
+        }
       }
-      return;
     }
     requestAnimationFrame(() => thread.scrollTo({ top: thread.scrollHeight, behavior: reducedMotion ? 'auto' : 'smooth' }));
   }
@@ -432,6 +465,34 @@
     if ($('#roomSubtitle') && clip.kind === 'answer') $('#roomSubtitle').textContent = `“${interview[clip.round].answer}”`;
   }
 
+  function restartAudioDrivenTyping(clip) {
+    const thread = $('#chatThread');
+    if (!thread || reducedMotion) return;
+    const questionEl = $('.chat-turn.is-current .chat-bubble > p', thread);
+    const answerEl = $('.chat-turn.is-current .chat-voice-card > p', thread);
+    if (!questionEl || !answerEl) return;
+    clearTimeout(typeTimer);
+    if (typeRaf) cancelAnimationFrame(typeRaf);
+    typeState.qEl = questionEl;
+    typeState.aEl = answerEl;
+    typeState.q = questionEl.textContent;
+    typeState.a = answerEl.textContent;
+    typeState.step = Math.max(1, Math.ceil(Math.max(typeState.q.length, typeState.a.length) / 70));
+    if (clip.kind === 'question') {
+      typeState.qN = 0;
+      typeState.aN = 0;
+      questionEl.textContent = '';
+      answerEl.textContent = '';
+    } else {
+      typeState.qN = typeState.q.length;
+      typeState.aN = 0;
+      answerEl.textContent = '';
+    }
+    typeState.everAudio = true;
+    typeState.active = true;
+    typewriterFrame();
+  }
+
   async function playQueueClip() {
     const clip = playlists[queue.mode][queue.index];
     if (!clip) return;
@@ -441,6 +502,9 @@
       await audio.play();
       if (clip.kind === 'answer') recordedRounds = Math.max(recordedRounds, clip.round + 1);
       syncPlaybackToUI();
+      if (currentScreen === 's-interview' && queue.mode === 'full' && clip.round === interviewIndex && !typeState.active) {
+        restartAudioDrivenTyping(clip);
+      }
     } catch (error) {
       console.error(error);
       toast('iPhone 需要先点击播放按钮才能播放原声');

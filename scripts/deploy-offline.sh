@@ -2,7 +2,7 @@
 set -euo pipefail
 
 APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-PORT="8080"
+PORT="41923"
 
 if ss -ltn "sport = :${PORT}" | tail -n +2 | grep -q .; then
   existing="$(docker ps --filter name='^/echo-frontend$' --format '{{.Names}}' 2>/dev/null || true)"
